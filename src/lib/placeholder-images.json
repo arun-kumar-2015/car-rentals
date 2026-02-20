@@ -29,6 +29,12 @@
       "description": "Toyota Innova premium MPV",
       "imageUrl": "https://images.unsplash.com/photo-1646918257569-65acc5ae4c0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8TVBWJTIwY2FyfGVufDB8fHx8MTc3MTU3MzQwNXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "MPV car"
+    },
+    {
+      "id": "maruti-ertiga",
+      "description": "Maruti Suzuki Ertiga silver MPV",
+      "imageUrl": "https://images.unsplash.com/photo-1621359339947-640a6b7d2f9b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxNUEYlMjBjYXJ8ZW58MHx8fHwxNzc1NjEzMTMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "MPV car"
     }
   ]
 }

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -63,6 +62,15 @@ const CARS = [
     seats: 7,
     transmission: "Automatic",
     image: PlaceHolderImages.find(img => img.id === "toyota-innova")?.imageUrl || "https://picsum.photos/seed/4/600/400"
+  },
+  {
+    id: "maruti-ertiga",
+    name: "Maruti Suzuki Ertiga",
+    pricePerDay: 2800,
+    fuel: "Petrol/CNG",
+    seats: 7,
+    transmission: "Manual",
+    image: PlaceHolderImages.find(img => img.id === "maruti-ertiga")?.imageUrl || "https://picsum.photos/seed/5/600/400"
   }
 ];
 
@@ -255,7 +263,7 @@ export default function HomePage() {
                   </div>
                   <div>
                     <h4 className="font-bold text-lg">Our Office</h4>
-                    <p className="text-muted-foreground">123 Luxury Lane, High Street, Mumbai - 400001</p>
+                    <p className="text-muted-foreground">Opposite New Bus Stand, Sircilla, Telangana - 505301</p>
                   </div>
                 </div>
               </div>
@@ -269,7 +277,7 @@ export default function HomePage() {
                   </p>
                 </div>
                 <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.597330545934!2d72.825833!3d18.948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTjCsDU2JzUyLjgiTiA3MsKwNDknMzMuMCJF!5e0!3m2!1sen!2sin!4v1614123456789!5m2!1sen!2sin" 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3789.923482390145!2d78.8252!3d18.3888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcc950000000001%3A0x0!2zMTjCsDIzJzE5LjciTiA3OMKwNDknMzAuNyJF!5e0!3m2!1sen!2sin!4v1614123456789!5m2!1sen!2sin" 
                   width="100%" 
                   height="100%" 
                   style={{ border: 0 }} 
