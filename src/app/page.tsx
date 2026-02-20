@@ -291,20 +291,16 @@ export default function HomePage() {
               </div>
 
               {/* Map Placeholder */}
-              <div className="mt-10 h-64 w-full rounded-2xl overflow-hidden border border-border bg-background relative">
-                <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
-                  <p className="flex flex-col items-center gap-2">
-                    <MapPin className="w-8 h-8" />
-                    Google Maps Integration Here
-                  </p>
-                </div>
+              <div className="mt-10 h-80 w-full rounded-2xl overflow-hidden border border-border bg-background relative shadow-2xl">
                 <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3789.923482390145!2d78.8252!3d18.3888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcc950000000001%3A0x0!2zMTjCsDIzJzE5LjciTiA3OMKwNDknMzAuNyJF!5e0!3m2!1sen!2sin!4v1614123456789!5m2!1sen!2sin" 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3789.923482390145!2d78.8252!3d18.3888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcc950000000001%3A0x0!2zMTjCsDIzJzE5LjciTiA3OMKwNDknMzAuNyJF!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin&z=18" 
                   width="100%" 
                   height="100%" 
                   style={{ border: 0 }} 
                   allowFullScreen 
                   loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Office Location"
                 ></iframe>
               </div>
             </div>
