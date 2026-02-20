@@ -1,0 +1,180 @@
+{
+  "entities": {
+    "Car": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Car",
+      "type": "object",
+      "description": "Represents a vehicle available for rent in the car rental service.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Car entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name or model of the car (e.g., Hyundai Creta)."
+        },
+        "pricePerDay": {
+          "type": "number",
+          "description": "The rental price of the car per day in the local currency."
+        },
+        "fuelType": {
+          "type": "string",
+          "description": "The type of fuel the car uses (e.g., Petrol, Diesel, Electric)."
+        },
+        "seats": {
+          "type": "number",
+          "description": "The number of passenger seats available in the car."
+        },
+        "transmissionType": {
+          "type": "string",
+          "description": "The type of transmission in the car (e.g., Automatic, Manual)."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the primary image for the car.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "pricePerDay",
+        "fuelType",
+        "seats",
+        "transmissionType",
+        "imageUrl"
+      ]
+    },
+    "Booking": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Booking",
+      "type": "object",
+      "description": "Represents a customer's reservation for a car rental.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Booking entity."
+        },
+        "customerName": {
+          "type": "string",
+          "description": "The full name of the customer making the booking."
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "The contact phone number of the customer."
+        },
+        "licenseNumber": {
+          "type": "string",
+          "description": "The driving license number of the customer."
+        },
+        "carId": {
+          "type": "string",
+          "description": "Reference to the Car entity that is being booked. (Relationship: Car 1:N Booking)"
+        },
+        "pickupDate": {
+          "type": "string",
+          "description": "The scheduled date and time for picking up the car.",
+          "format": "date-time"
+        },
+        "returnDate": {
+          "type": "string",
+          "description": "The scheduled date and time for returning the car.",
+          "format": "date-time"
+        },
+        "pickupLocation": {
+          "type": "string",
+          "description": "The specified location for picking up the car."
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "The total calculated rental price for the booking duration."
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the booking (e.g., Pending, Confirmed, Completed).",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "The date and time when the booking record was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "customerName",
+        "phoneNumber",
+        "licenseNumber",
+        "carId",
+        "pickupDate",
+        "returnDate",
+        "pickupLocation",
+        "totalAmount",
+        "status",
+        "timestamp"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/cars/{carId}",
+        "definition": {
+          "entityName": "Car",
+          "schema": {
+            "$ref": "#/backend/entities/Car"
+          },
+          "description": "Stores details about each available car. Documents in this collection are publicly readable by anyone. Write, update, and delete operations are restricted to authenticated administrators. This collection does not require denormalized authorization fields as it has a homogeneous public read security posture.",
+          "params": [
+            {
+              "name": "carId",
+              "description": "The unique identifier for a specific car."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/bookings/{bookingId}",
+        "definition": {
+          "entityName": "Booking",
+          "schema": {
+            "$ref": "#/backend/entities/Booking"
+          },
+          "description": "Contains records of car rental bookings. Bookings can be created by any user (authenticated or anonymous). Due to the absence of a `creatorUserId` field in the provided schema, individual users cannot directly manage their own bookings based on their Firebase UID. Therefore, read, update, and delete operations on these documents are primarily restricted to administrators. Administrators are identified via the `/roles_admin` collection. **Note:** To enable user-specific booking management, adding a `creatorUserId` field to the Booking entity for authorization independence is recommended.",
+          "params": [
+            {
+              "name": "bookingId",
+              "description": "The unique identifier for a specific booking."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/roles_admin/{adminId}",
+        "definition": {
+          "entityName": "AdminRole",
+          "schema": {
+            "$ref": "#/backend/entities/AdminRole"
+          },
+          "description": "This collection identifies users who have administrator privileges. An administrator is any user whose Firebase Authentication UID exists as a document ID in this collection. This follows the 'existence over content' principle for DBAC. It enables robust authorization independence for admin checks (e.g., `allow write: if exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid))`).",
+          "params": [
+            {
+              "name": "adminId",
+              "description": "The Firebase Authentication UID of a user granted administrator privileges."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed following the core principles of Authorization Independence, Structural Segregation, and DBAC to ensure a secure, scalable, and debuggable backend for Arun Car Rentals. It accounts for public car listings, user-initiated bookings (though with current schema limitations for individual user access), and a robust admin management system.\n\n**Authorization Independence (CRITICAL):**\n1.  **Car Listings (`/cars/{carId}`):** These documents are designed to be publicly readable by all users, removing any need for hierarchical authorization checks. Write access is restricted to administrators only, which is determined by a separate, independent check against the `/roles_admin` collection (explained below). This ensures that car data can be accessed and listed without complex `get()` calls in security rules.\n2.  **Bookings (`/bookings/{bookingId}`):** As per the provided `Booking` entity schema, there is no `creatorUserId` field to link a booking directly to a Firebase authenticated user's `uid`. This means that individual authenticated users cannot securely read, update, or delete *their own* bookings using standard Firestore security rules based on `request.auth.uid` matching a document field. Therefore, for the given schema, bookings are primarily managed by administrators. Administrators gain access by checking their `uid` against the `/roles_admin` collection, which is an independent check, satisfying authorization independence for admin actions. **Recommendation:** To enable individual users to manage their own bookings securely and achieve full Authorization Independence for user-specific booking management, it is strongly recommended to *add a `creatorUserId` field* (type: string, storing `request.auth.uid`) to the `Booking` entity. This denormalized field would allow simple, atomic, and independent authorization checks (e.g., `allow read, update, delete: if request.auth.uid == resource.data.creatorUserId;`).\n3.  **Admin Roles (`/roles_admin/{adminId}`):** Authorization for administrative actions is entirely independent. A user is an admin if a document exists at `/roles_admin/{request.auth.uid}`. This "
+  }
+}
