@@ -1,3 +1,34 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-car",
+      "description": "Luxury black sports car on a dark background",
+      "imageUrl": "https://images.unsplash.com/photo-1618418721668-0d1f72aa4bab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxsdXh1cnklMjBjYXJ8ZW58MHx8fHwxNzcxNDU5MDEzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "luxury car"
+    },
+    {
+      "id": "hyundai-creta",
+      "description": "Hyundai Creta white SUV",
+      "imageUrl": "https://images.unsplash.com/photo-1650959818516-03d68079f9a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxTVVYlMjBjYXJ8ZW58MHx8fHwxNzcxNTczNDA1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "SUV car"
+    },
+    {
+      "id": "swift-dzire",
+      "description": "Swift Dzire silver sedan",
+      "imageUrl": "https://images.unsplash.com/photo-1722088353797-ddfe6e2faf34?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzZWRhbiUyMGNhcnxlbnwwfHx8fDE3NzE0OTA5MDl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sedan car"
+    },
+    {
+      "id": "mahindra-thar",
+      "description": "Mahindra Thar rugged 4x4 offroader",
+      "imageUrl": "https://images.unsplash.com/photo-1650303417855-e6220f0e564f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxvZmZyb2FkJTIwamVlcHxlbnwwfHx8fDE3NzE1NjE5NTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "offroad jeep"
+    },
+    {
+      "id": "toyota-innova",
+      "description": "Toyota Innova premium MPV",
+      "imageUrl": "https://images.unsplash.com/photo-1646918257569-65acc5ae4c0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8TVBWJTIwY2FyfGVufDB8fHx8MTc3MTU3MzQwNXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "MPV car"
+    }
+  ]
 }
