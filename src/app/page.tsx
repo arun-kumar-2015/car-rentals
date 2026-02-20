@@ -71,6 +71,15 @@ const CARS = [
     seats: 7,
     transmission: "Manual",
     image: PlaceHolderImages.find(img => img.id === "maruti-ertiga")?.imageUrl || "https://picsum.photos/seed/5/600/400"
+  },
+  {
+    id: "maruti-baleno",
+    name: "Maruti Suzuki Baleno",
+    pricePerDay: 2200,
+    fuel: "Petrol",
+    seats: 5,
+    transmission: "Manual/AMT",
+    image: PlaceHolderImages.find(img => img.id === "maruti-baleno")?.imageUrl || "https://picsum.photos/seed/6/600/400"
   }
 ];
 
