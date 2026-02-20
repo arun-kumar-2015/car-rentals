@@ -13,10 +13,34 @@
       "imageHint": "SUV car"
     },
     {
+      "id": "hyundai-creta-front",
+      "description": "Hyundai Creta Front View",
+      "imageUrl": "https://images.unsplash.com/photo-1669273347077-d652610d7a6e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "car front"
+    },
+    {
+      "id": "hyundai-creta-left",
+      "description": "Hyundai Creta Left View",
+      "imageUrl": "https://images.unsplash.com/photo-1669273347318-7b9c97b2bc23?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "car side"
+    },
+    {
       "id": "swift-dzire",
       "description": "Swift Dzire silver sedan",
       "imageUrl": "https://images.unsplash.com/photo-1722088353797-ddfe6e2faf34?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzZWRhbiUyMGNhcnxlbnwwfHx8fDE3NzE0OTA5MDl8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "sedan car"
+    },
+    {
+      "id": "swift-dzire-front",
+      "description": "Swift Dzire Front View",
+      "imageUrl": "https://images.unsplash.com/photo-1672322475459-7f5b80424614?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "car front"
+    },
+    {
+      "id": "swift-dzire-left",
+      "description": "Swift Dzire Left View",
+      "imageUrl": "https://images.unsplash.com/photo-1672322475283-f368ba609f3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "car side"
     },
     {
       "id": "mahindra-thar",
@@ -25,10 +49,34 @@
       "imageHint": "offroad jeep"
     },
     {
+      "id": "mahindra-thar-front",
+      "description": "Mahindra Thar Front View",
+      "imageUrl": "https://images.unsplash.com/photo-1655708823707-160670868a25?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "car front"
+    },
+    {
+      "id": "mahindra-thar-left",
+      "description": "Mahindra Thar Left View",
+      "imageUrl": "https://images.unsplash.com/photo-1655708823635-4299b661d49e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "car side"
+    },
+    {
       "id": "toyota-innova",
       "description": "Toyota Innova premium MPV",
       "imageUrl": "https://images.unsplash.com/photo-1646918257569-65acc5ae4c0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8TVBWJTIwY2FyfGVufDB8fHx8MTc3MTU3MzQwNXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "MPV car"
+    },
+    {
+      "id": "toyota-innova-front",
+      "description": "Toyota Innova Front View",
+      "imageUrl": "https://images.unsplash.com/photo-1646918257570-65acc5ae4c0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "car front"
+    },
+    {
+      "id": "toyota-innova-left",
+      "description": "Toyota Innova Left View",
+      "imageUrl": "https://images.unsplash.com/photo-1646918257580-65acc5ae4c0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "car side"
     },
     {
       "id": "maruti-ertiga",
@@ -37,10 +85,34 @@
       "imageHint": "MPV car"
     },
     {
+      "id": "maruti-ertiga-front",
+      "description": "Maruti Ertiga Front View",
+      "imageUrl": "https://images.unsplash.com/photo-1628532442466-9e8023719003?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "car front"
+    },
+    {
+      "id": "maruti-ertiga-left",
+      "description": "Maruti Ertiga Left View",
+      "imageUrl": "https://images.unsplash.com/photo-1628532442654-9e8023719003?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "car side"
+    },
+    {
       "id": "maruti-baleno",
       "description": "Maruti Suzuki Baleno premium hatchback",
       "imageUrl": "https://images.unsplash.com/photo-1605270396326-36fa250e661f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8aGF0Y2hiYWNrJTIwY2FyfGVufDB8fHx8MTc3MTUyMjE2Nnww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "hatchback car"
+    },
+    {
+      "id": "maruti-baleno-front",
+      "description": "Maruti Baleno Front View",
+      "imageUrl": "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "car front"
+    },
+    {
+      "id": "maruti-baleno-left",
+      "description": "Maruti Baleno Left View",
+      "imageUrl": "https://images.unsplash.com/photo-1619767886580-efdc259cde1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "car side"
     }
   ]
 }

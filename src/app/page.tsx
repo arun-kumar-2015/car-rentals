@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -34,7 +35,9 @@ const CARS = [
     fuel: "Diesel",
     seats: 5,
     transmission: "Manual/Auto",
-    image: PlaceHolderImages.find(img => img.id === "hyundai-creta")?.imageUrl || "https://picsum.photos/seed/1/600/400"
+    image: PlaceHolderImages.find(img => img.id === "hyundai-creta")?.imageUrl || "https://picsum.photos/seed/1/600/400",
+    frontImage: PlaceHolderImages.find(img => img.id === "hyundai-creta-front")?.imageUrl || "https://picsum.photos/seed/11/600/400",
+    leftImage: PlaceHolderImages.find(img => img.id === "hyundai-creta-left")?.imageUrl || "https://picsum.photos/seed/12/600/400"
   },
   {
     id: "swift-dzire",
@@ -43,7 +46,9 @@ const CARS = [
     fuel: "Petrol",
     seats: 5,
     transmission: "Manual",
-    image: PlaceHolderImages.find(img => img.id === "swift-dzire")?.imageUrl || "https://picsum.photos/seed/2/600/400"
+    image: PlaceHolderImages.find(img => img.id === "swift-dzire")?.imageUrl || "https://picsum.photos/seed/2/600/400",
+    frontImage: PlaceHolderImages.find(img => img.id === "swift-dzire-front")?.imageUrl || "https://picsum.photos/seed/21/600/400",
+    leftImage: PlaceHolderImages.find(img => img.id === "swift-dzire-left")?.imageUrl || "https://picsum.photos/seed/22/600/400"
   },
   {
     id: "mahindra-thar",
@@ -52,7 +57,9 @@ const CARS = [
     fuel: "Diesel",
     seats: 4,
     transmission: "Manual (4x4)",
-    image: PlaceHolderImages.find(img => img.id === "mahindra-thar")?.imageUrl || "https://picsum.photos/seed/3/600/400"
+    image: PlaceHolderImages.find(img => img.id === "mahindra-thar")?.imageUrl || "https://picsum.photos/seed/3/600/400",
+    frontImage: PlaceHolderImages.find(img => img.id === "mahindra-thar-front")?.imageUrl || "https://picsum.photos/seed/31/600/400",
+    leftImage: PlaceHolderImages.find(img => img.id === "mahindra-thar-left")?.imageUrl || "https://picsum.photos/seed/32/600/400"
   },
   {
     id: "toyota-innova",
@@ -61,7 +68,9 @@ const CARS = [
     fuel: "Diesel",
     seats: 7,
     transmission: "Automatic",
-    image: PlaceHolderImages.find(img => img.id === "toyota-innova")?.imageUrl || "https://picsum.photos/seed/4/600/400"
+    image: PlaceHolderImages.find(img => img.id === "toyota-innova")?.imageUrl || "https://picsum.photos/seed/4/600/400",
+    frontImage: PlaceHolderImages.find(img => img.id === "toyota-innova-front")?.imageUrl || "https://picsum.photos/seed/41/600/400",
+    leftImage: PlaceHolderImages.find(img => img.id === "toyota-innova-left")?.imageUrl || "https://picsum.photos/seed/42/600/400"
   },
   {
     id: "maruti-ertiga",
@@ -70,7 +79,9 @@ const CARS = [
     fuel: "Petrol/CNG",
     seats: 7,
     transmission: "Manual",
-    image: PlaceHolderImages.find(img => img.id === "maruti-ertiga")?.imageUrl || "https://picsum.photos/seed/5/600/400"
+    image: PlaceHolderImages.find(img => img.id === "maruti-ertiga")?.imageUrl || "https://picsum.photos/seed/5/600/400",
+    frontImage: PlaceHolderImages.find(img => img.id === "maruti-ertiga-front")?.imageUrl || "https://picsum.photos/seed/51/600/400",
+    leftImage: PlaceHolderImages.find(img => img.id === "maruti-ertiga-left")?.imageUrl || "https://picsum.photos/seed/52/600/400"
   },
   {
     id: "maruti-baleno",
@@ -79,7 +90,9 @@ const CARS = [
     fuel: "Petrol",
     seats: 5,
     transmission: "Manual/AMT",
-    image: PlaceHolderImages.find(img => img.id === "maruti-baleno")?.imageUrl || "https://picsum.photos/seed/6/600/400"
+    image: PlaceHolderImages.find(img => img.id === "maruti-baleno")?.imageUrl || "https://picsum.photos/seed/6/600/400",
+    frontImage: PlaceHolderImages.find(img => img.id === "maruti-baleno-front")?.imageUrl || "https://picsum.photos/seed/61/600/400",
+    leftImage: PlaceHolderImages.find(img => img.id === "maruti-baleno-left")?.imageUrl || "https://picsum.photos/seed/62/600/400"
   }
 ];
 
@@ -224,7 +237,7 @@ export default function HomePage() {
                     className="w-full mt-auto font-bold uppercase tracking-wider"
                     onClick={() => openBooking(car)}
                   >
-                    Book This Car
+                    View & Book
                   </Button>
                 </div>
               </div>

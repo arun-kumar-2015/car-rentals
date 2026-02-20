@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Image from "next/image";
 import { format, differenceInDays } from "date-fns";
 import { 
   Dialog, 
@@ -10,6 +11,13 @@ import {
   DialogTitle, 
   DialogDescription,
 } from "@/components/ui/dialog";
+import { 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem, 
+  CarouselNext, 
+  CarouselPrevious 
+} from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,6 +31,9 @@ interface Car {
   id: string;
   name: string;
   pricePerDay: number;
+  image: string;
+  frontImage: string;
+  leftImage: string;
 }
 
 interface BookingDialogProps {
@@ -57,11 +68,19 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
     if (formData.rentalType === "daily") {
       return car.pricePerDay * totalDays;
     } else {
-      // 6 hours = 40% of daily rate, 12 hours = 70% of daily rate
       const factor = formData.hourlyDuration === "6" ? 0.4 : 0.7;
       return Math.round(car.pricePerDay * factor);
     }
   }, [car, totalDays, formData.rentalType, formData.hourlyDuration]);
+
+  const carImages = useMemo(() => {
+    if (!car) return [];
+    return [
+      { label: "Exterior", url: car.image },
+      { label: "Front View", url: car.frontImage },
+      { label: "Side View", url: car.leftImage },
+    ];
+  }, [car]);
 
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,172 +120,193 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[500px] bg-card text-foreground border-border max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-headline flex items-center gap-2">
-            Book <span className="text-primary">{car?.name}</span>
-          </DialogTitle>
-          <DialogDescription className="text-muted-foreground">
-            Complete the form below to reserve your vehicle.
-          </DialogDescription>
-        </DialogHeader>
-        
-        <form onSubmit={handleBooking} className="space-y-6 py-4">
-          <div className="space-y-4">
-            <Label className="text-xs uppercase tracking-wider text-muted-foreground">Rental Plan</Label>
-            <RadioGroup 
-              value={formData.rentalType} 
-              onValueChange={(val) => setFormData(p => ({ ...p, rentalType: val as any }))}
-              className="flex gap-4"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="daily" id="daily" />
-                <Label htmlFor="daily">Daily Rental</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="hourly" id="hourly" />
-                <Label htmlFor="hourly">Hourly Rental</Label>
-              </div>
-            </RadioGroup>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
-                <Calendar className="w-3 h-3" /> {formData.rentalType === "daily" ? "Pickup Date" : "Booking Date"}
-              </Label>
-              <Input 
-                type="date" 
-                name="pickupDate"
-                value={formData.pickupDate}
-                onChange={handleChange}
-                required
-                className="bg-background border-border focus:ring-primary"
-              />
-            </div>
-            
-            {formData.rentalType === "daily" ? (
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
-                  <Calendar className="w-3 h-3" /> Return Date
-                </Label>
-                <Input 
-                  type="date" 
-                  name="returnDate"
-                  value={formData.returnDate}
-                  onChange={handleChange}
-                  required
-                  className="bg-background border-border focus:ring-primary"
-                />
-              </div>
-            ) : (
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
-                  <Clock className="w-3 h-3" /> Duration
-                </Label>
-                <RadioGroup 
-                  value={formData.hourlyDuration} 
-                  onValueChange={(val) => setFormData(p => ({ ...p, hourlyDuration: val as any }))}
-                  className="flex gap-4 pt-2"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="6" id="6hrs" />
-                    <Label htmlFor="6hrs">6 Hrs</Label>
+      <DialogContent className="sm:max-w-[550px] bg-card text-foreground border-border max-h-[95vh] overflow-y-auto p-0 gap-0">
+        <div className="relative w-full aspect-video bg-black overflow-hidden group">
+          <Carousel className="w-full h-full">
+            <CarouselContent>
+              {carImages.map((img, idx) => (
+                <CarouselItem key={idx} className="relative aspect-video">
+                  <Image 
+                    src={img.url} 
+                    alt={`${car?.name} ${img.label}`} 
+                    fill 
+                    className="object-cover"
+                  />
+                  <div className="absolute bottom-4 left-4">
+                    <Badge variant="secondary" className="bg-black/60 text-white border-none">{img.label}</Badge>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="12" id="12hrs" />
-                    <Label htmlFor="12hrs">12 Hrs</Label>
-                  </div>
-                </RadioGroup>
-              </div>
-            )}
-          </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <CarouselNext className="right-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+          </Carousel>
+        </div>
 
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
-                <User className="w-3 h-3" /> Full Name
-              </Label>
-              <Input 
-                placeholder="Enter your name"
-                name="customerName"
-                value={formData.customerName}
-                onChange={handleChange}
-                required
-                className="bg-background border-border focus:ring-primary"
-              />
+        <div className="p-6 space-y-6">
+          <DialogHeader>
+            <DialogTitle className="text-3xl font-headline flex items-center justify-between">
+              <div>Book <span className="text-primary">{car?.name}</span></div>
+              <div className="text-xl text-primary font-bold">₹{car?.pricePerDay}<span className="text-sm text-muted-foreground">/day</span></div>
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground text-base">
+              Complete the form below to reserve your vehicle from our premium fleet.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <form onSubmit={handleBooking} className="space-y-6">
+            <div className="space-y-4">
+              <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Rental Plan</Label>
+              <RadioGroup 
+                value={formData.rentalType} 
+                onValueChange={(val) => setFormData(p => ({ ...p, rentalType: val as any }))}
+                className="flex gap-6"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="daily" id="daily" className="border-primary text-primary" />
+                  <Label htmlFor="daily" className="cursor-pointer font-semibold">Daily Rental</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="hourly" id="hourly" className="border-primary text-primary" />
+                  <Label htmlFor="hourly" className="cursor-pointer font-semibold">Hourly Rental</Label>
+                </div>
+              </RadioGroup>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
-                  <Phone className="w-3 h-3" /> Phone Number
+                <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                  <Calendar className="w-3.5 h-3.5 text-primary" /> {formData.rentalType === "daily" ? "Pickup Date" : "Booking Date"}
                 </Label>
                 <Input 
-                  placeholder="+91 00000 00000"
-                  name="phone"
-                  value={formData.phone}
+                  type="date" 
+                  name="pickupDate"
+                  value={formData.pickupDate}
                   onChange={handleChange}
                   required
-                  className="bg-background border-border focus:ring-primary"
+                  className="bg-background border-border h-11 focus:ring-primary"
                 />
               </div>
+              
+              {formData.rentalType === "daily" ? (
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                    <Calendar className="w-3.5 h-3.5 text-primary" /> Return Date
+                  </Label>
+                  <Input 
+                    type="date" 
+                    name="returnDate"
+                    value={formData.returnDate}
+                    onChange={handleChange}
+                    required
+                    className="bg-background border-border h-11 focus:ring-primary"
+                  />
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                    <Clock className="w-3.5 h-3.5 text-primary" /> Duration
+                  </Label>
+                  <RadioGroup 
+                    value={formData.hourlyDuration} 
+                    onValueChange={(val) => setFormData(p => ({ ...p, hourlyDuration: val as any }))}
+                    className="flex gap-4 pt-2"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="6" id="6hrs" />
+                      <Label htmlFor="6hrs" className="cursor-pointer">6 Hrs</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="12" id="12hrs" />
+                      <Label htmlFor="12hrs" className="cursor-pointer">12 Hrs</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-4">
               <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
-                  <IdCard className="w-3 h-3" /> License Number
+                <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                  <User className="w-3.5 h-3.5 text-primary" /> Full Name
                 </Label>
                 <Input 
-                  placeholder="DL-XXXXXXXXXXXX"
-                  name="licenseNumber"
-                  value={formData.licenseNumber}
+                  placeholder="Enter your name"
+                  name="customerName"
+                  value={formData.customerName}
                   onChange={handleChange}
                   required
-                  className="bg-background border-border focus:ring-primary"
+                  className="bg-background border-border h-11 focus:ring-primary"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                    <Phone className="w-3.5 h-3.5 text-primary" /> Phone Number
+                  </Label>
+                  <Input 
+                    placeholder="+91 00000 00000"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                    className="bg-background border-border h-11 focus:ring-primary"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                    <IdCard className="w-3.5 h-3.5 text-primary" /> License Number
+                  </Label>
+                  <Input 
+                    placeholder="DL-XXXXXXXXXXXX"
+                    name="licenseNumber"
+                    value={formData.licenseNumber}
+                    onChange={handleChange}
+                    required
+                    className="bg-background border-border h-11 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                  <MapPin className="w-3.5 h-3.5 text-primary" /> Pickup Location
+                </Label>
+                <Input 
+                  placeholder="Area/City for pickup"
+                  name="pickupLocation"
+                  value={formData.pickupLocation}
+                  onChange={handleChange}
+                  required
+                  className="bg-background border-border h-11 focus:ring-primary"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
-                <MapPin className="w-3 h-3" /> Pickup Location
-              </Label>
-              <Input 
-                placeholder="Area/City for pickup"
-                name="pickupLocation"
-                value={formData.pickupLocation}
-                onChange={handleChange}
-                required
-                className="bg-background border-border focus:ring-primary"
-              />
+            <div className="bg-secondary/40 p-5 rounded-2xl border border-border space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">Selected Plan:</span>
+                <span className="font-bold capitalize">{formData.rentalType} Rental</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">Booking Duration:</span>
+                <span className="font-bold">
+                  {formData.rentalType === "daily" ? `${totalDays} Day(s)` : `${formData.hourlyDuration} Hours`}
+                </span>
+              </div>
+              <div className="h-px bg-border my-2" />
+              <div className="flex justify-between items-center">
+                <span className="text-lg font-bold">Total Price:</span>
+                <span className="text-3xl font-black text-primary">₹{totalAmount.toLocaleString()}</span>
+              </div>
             </div>
-          </div>
 
-          <div className="bg-secondary/50 p-4 rounded-lg border border-border">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-muted-foreground">Daily Base Rate:</span>
-              <span className="font-semibold">₹{car?.pricePerDay} / day</span>
-            </div>
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-muted-foreground">Selected Plan:</span>
-              <span className="font-semibold capitalize">{formData.rentalType}</span>
-            </div>
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-muted-foreground">Duration:</span>
-              <span className="font-semibold">
-                {formData.rentalType === "daily" ? `${totalDays} Day(s)` : `${formData.hourlyDuration} Hours`}
-              </span>
-            </div>
-            <div className="h-px bg-border my-2" />
-            <div className="flex justify-between items-center">
-              <span className="text-lg font-bold">Total Price:</span>
-              <span className="text-2xl font-bold text-primary">₹{totalAmount}</span>
-            </div>
-          </div>
-
-          <Button type="submit" className="w-full h-12 text-lg font-headline font-bold" disabled={loading}>
-            {loading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : "Confirm Booking"}
-          </Button>
-        </form>
+            <Button type="submit" className="w-full h-14 text-xl font-headline font-black uppercase tracking-widest" disabled={loading}>
+              {loading ? <Loader2 className="w-6 h-6 animate-spin mr-2" /> : "Confirm Reservation"}
+            </Button>
+          </form>
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "Car": {
@@ -34,6 +35,16 @@
           "type": "string",
           "description": "URL of the primary image for the car.",
           "format": "uri"
+        },
+        "frontImageUrl": {
+          "type": "string",
+          "description": "URL of the car viewed from the front.",
+          "format": "uri"
+        },
+        "leftImageUrl": {
+          "type": "string",
+          "description": "URL of the car viewed from the left side.",
+          "format": "uri"
         }
       },
       "required": [
@@ -43,7 +54,9 @@
         "fuelType",
         "seats",
         "transmissionType",
-        "imageUrl"
+        "imageUrl",
+        "frontImageUrl",
+        "leftImageUrl"
       ]
     },
     "Booking": {
@@ -70,7 +83,7 @@
         },
         "carId": {
           "type": "string",
-          "description": "Reference to the Car entity that is being booked. (Relationship: Car 1:N Booking)"
+          "description": "Reference to the Car entity that is being booked."
         },
         "pickupDate": {
           "type": "string",
@@ -92,10 +105,7 @@
         },
         "status": {
           "type": "string",
-          "description": "The current status of the booking (e.g., Pending, Confirmed, Completed).",
-          "items": {
-            "type": "string"
-          }
+          "description": "The current status of the booking (e.g., Pending, Confirmed, Completed)."
         },
         "timestamp": {
           "type": "string",
@@ -133,7 +143,7 @@
           "schema": {
             "$ref": "#/backend/entities/Car"
           },
-          "description": "Stores details about each available car. Documents in this collection are publicly readable by anyone. Write, update, and delete operations are restricted to authenticated administrators. This collection does not require denormalized authorization fields as it has a homogeneous public read security posture.",
+          "description": "Stores details about each available car.",
           "params": [
             {
               "name": "carId",
@@ -149,7 +159,7 @@
           "schema": {
             "$ref": "#/backend/entities/Booking"
           },
-          "description": "Contains records of car rental bookings. Bookings can be created by any user (authenticated or anonymous). Due to the absence of a `creatorUserId` field in the provided schema, individual users cannot directly manage their own bookings based on their Firebase UID. Therefore, read, update, and delete operations on these documents are primarily restricted to administrators. Administrators are identified via the `/roles_admin` collection. **Note:** To enable user-specific booking management, adding a `creatorUserId` field to the Booking entity for authorization independence is recommended.",
+          "description": "Contains records of car rental bookings.",
           "params": [
             {
               "name": "bookingId",
@@ -163,18 +173,20 @@
         "definition": {
           "entityName": "AdminRole",
           "schema": {
-            "$ref": "#/backend/entities/AdminRole"
+            "type": "object",
+            "properties": {
+              "uid": { "type": "string" }
+            }
           },
-          "description": "This collection identifies users who have administrator privileges. An administrator is any user whose Firebase Authentication UID exists as a document ID in this collection. This follows the 'existence over content' principle for DBAC. It enables robust authorization independence for admin checks (e.g., `allow write: if exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid))`).",
+          "description": "Identifies users with administrator privileges.",
           "params": [
             {
               "name": "adminId",
-              "description": "The Firebase Authentication UID of a user granted administrator privileges."
+              "description": "The Firebase Authentication UID of an admin."
             }
           ]
         }
       }
-    ],
-    "reasoning": "The Firestore structure is designed following the core principles of Authorization Independence, Structural Segregation, and DBAC to ensure a secure, scalable, and debuggable backend for Arun Car Rentals. It accounts for public car listings, user-initiated bookings (though with current schema limitations for individual user access), and a robust admin management system.\n\n**Authorization Independence (CRITICAL):**\n1.  **Car Listings (`/cars/{carId}`):** These documents are designed to be publicly readable by all users, removing any need for hierarchical authorization checks. Write access is restricted to administrators only, which is determined by a separate, independent check against the `/roles_admin` collection (explained below). This ensures that car data can be accessed and listed without complex `get()` calls in security rules.\n2.  **Bookings (`/bookings/{bookingId}`):** As per the provided `Booking` entity schema, there is no `creatorUserId` field to link a booking directly to a Firebase authenticated user's `uid`. This means that individual authenticated users cannot securely read, update, or delete *their own* bookings using standard Firestore security rules based on `request.auth.uid` matching a document field. Therefore, for the given schema, bookings are primarily managed by administrators. Administrators gain access by checking their `uid` against the `/roles_admin` collection, which is an independent check, satisfying authorization independence for admin actions. **Recommendation:** To enable individual users to manage their own bookings securely and achieve full Authorization Independence for user-specific booking management, it is strongly recommended to *add a `creatorUserId` field* (type: string, storing `request.auth.uid`) to the `Booking` entity. This denormalized field would allow simple, atomic, and independent authorization checks (e.g., `allow read, update, delete: if request.auth.uid == resource.data.creatorUserId;`).\n3.  **Admin Roles (`/roles_admin/{adminId}`):** Authorization for administrative actions is entirely independent. A user is an admin if a document exists at `/roles_admin/{request.auth.uid}`. This "
+    ]
   }
 }
