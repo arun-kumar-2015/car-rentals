@@ -39,7 +39,8 @@ import {
   User, 
   Phone, 
   Car as CarIcon, 
-  Wallet
+  Wallet,
+  Timer
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -50,7 +51,9 @@ interface Booking {
   licenseNumber: string;
   carName: string;
   pickupDate: string;
-  returnDate: string;
+  returnDate?: string;
+  rentalType: "daily" | "hourly";
+  durationLabel: string;
   totalAmount: number;
   status: "Pending" | "Confirmed" | "Completed";
   timestamp: any;
@@ -194,6 +197,7 @@ export default function AdminDashboard() {
                   <TableRow className="border-border hover:bg-transparent">
                     <TableHead className="w-[200px]">Customer</TableHead>
                     <TableHead>Car</TableHead>
+                    <TableHead>Duration</TableHead>
                     <TableHead>Dates</TableHead>
                     <TableHead>Amount</TableHead>
                     <TableHead>Status</TableHead>
@@ -215,9 +219,24 @@ export default function AdminDashboard() {
                         </Badge>
                       </TableCell>
                       <TableCell>
+                        <div className="flex items-center gap-1.5 text-xs font-semibold">
+                          {booking.rentalType === "hourly" ? (
+                            <Badge variant="secondary" className="bg-primary/20 text-primary border-primary/30">
+                              <Timer className="w-3 h-3 mr-1" /> {booking.durationLabel}
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline">
+                              <Calendar className="w-3 h-3 mr-1" /> {booking.durationLabel}
+                            </Badge>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
                         <div className="text-xs space-y-0.5">
-                          <div className="flex items-center gap-1"><span className="text-primary">Pick:</span> {booking.pickupDate}</div>
-                          <div className="flex items-center gap-1"><span className="text-primary">Ret:</span> {booking.returnDate}</div>
+                          <div className="flex items-center gap-1"><span className="text-primary">Date:</span> {booking.pickupDate}</div>
+                          {booking.rentalType === "daily" && booking.returnDate && (
+                            <div className="flex items-center gap-1"><span className="text-primary">Ret:</span> {booking.returnDate}</div>
+                          )}
                         </div>
                       </TableCell>
                       <TableCell className="font-bold">₹{booking.totalAmount}</TableCell>
@@ -254,7 +273,7 @@ export default function AdminDashboard() {
                   ))}
                   {bookings.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={6} className="h-48 text-center text-muted-foreground">
+                      <TableCell colSpan={7} className="h-48 text-center text-muted-foreground">
                         No bookings found.
                       </TableCell>
                     </TableRow>

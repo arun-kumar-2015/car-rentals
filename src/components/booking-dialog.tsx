@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { format, differenceInDays } from "date-fns";
 import { 
   Dialog, 
@@ -9,15 +9,15 @@ import {
   DialogHeader, 
   DialogTitle, 
   DialogDescription,
-  DialogFooter
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Calendar, User, Phone, IdCard, MapPin } from "lucide-react";
+import { Loader2, Calendar, User, Phone, IdCard, MapPin, Clock } from "lucide-react";
 
 interface Car {
   id: string;
@@ -39,6 +39,8 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
     phone: "",
     licenseNumber: "",
     pickupLocation: "",
+    rentalType: "daily" as "daily" | "hourly",
+    hourlyDuration: "6" as "6" | "12",
     pickupDate: format(new Date(), "yyyy-MM-dd"),
     returnDate: format(new Date(Date.now() + 86400000), "yyyy-MM-dd"),
   });
@@ -51,8 +53,15 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
   }, [formData.pickupDate, formData.returnDate]);
 
   const totalAmount = useMemo(() => {
-    return (car?.pricePerDay || 0) * totalDays;
-  }, [car, totalDays]);
+    if (!car) return 0;
+    if (formData.rentalType === "daily") {
+      return car.pricePerDay * totalDays;
+    } else {
+      // 6 hours = 40% of daily rate, 12 hours = 70% of daily rate
+      const factor = formData.hourlyDuration === "6" ? 0.4 : 0.7;
+      return Math.round(car.pricePerDay * factor);
+    }
+  }, [car, totalDays, formData.rentalType, formData.hourlyDuration]);
 
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,6 +75,7 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
         totalAmount,
         status: "Pending",
         timestamp: serverTimestamp(),
+        durationLabel: formData.rentalType === "daily" ? `${totalDays} Day(s)` : `${formData.hourlyDuration} Hours`,
       });
       
       toast({
@@ -102,10 +112,28 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
         </DialogHeader>
         
         <form onSubmit={handleBooking} className="space-y-6 py-4">
+          <div className="space-y-4">
+            <Label className="text-xs uppercase tracking-wider text-muted-foreground">Rental Plan</Label>
+            <RadioGroup 
+              value={formData.rentalType} 
+              onValueChange={(val) => setFormData(p => ({ ...p, rentalType: val as any }))}
+              className="flex gap-4"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="daily" id="daily" />
+                <Label htmlFor="daily">Daily Rental</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="hourly" id="hourly" />
+                <Label htmlFor="hourly">Hourly Rental</Label>
+              </div>
+            </RadioGroup>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
-                <Calendar className="w-3 h-3" /> Pickup Date
+                <Calendar className="w-3 h-3" /> {formData.rentalType === "daily" ? "Pickup Date" : "Booking Date"}
               </Label>
               <Input 
                 type="date" 
@@ -116,19 +144,42 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
                 className="bg-background border-border focus:ring-primary"
               />
             </div>
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
-                <Calendar className="w-3 h-3" /> Return Date
-              </Label>
-              <Input 
-                type="date" 
-                name="returnDate"
-                value={formData.returnDate}
-                onChange={handleChange}
-                required
-                className="bg-background border-border focus:ring-primary"
-              />
-            </div>
+            
+            {formData.rentalType === "daily" ? (
+              <div className="space-y-2">
+                <Label className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
+                  <Calendar className="w-3 h-3" /> Return Date
+                </Label>
+                <Input 
+                  type="date" 
+                  name="returnDate"
+                  value={formData.returnDate}
+                  onChange={handleChange}
+                  required
+                  className="bg-background border-border focus:ring-primary"
+                />
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Label className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
+                  <Clock className="w-3 h-3" /> Duration
+                </Label>
+                <RadioGroup 
+                  value={formData.hourlyDuration} 
+                  onValueChange={(val) => setFormData(p => ({ ...p, hourlyDuration: val as any }))}
+                  className="flex gap-4 pt-2"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="6" id="6hrs" />
+                    <Label htmlFor="6hrs">6 Hrs</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="12" id="12hrs" />
+                    <Label htmlFor="12hrs">12 Hrs</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+            )}
           </div>
 
           <div className="space-y-4">
@@ -192,12 +243,18 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
 
           <div className="bg-secondary/50 p-4 rounded-lg border border-border">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-muted-foreground">Rate:</span>
+              <span className="text-sm text-muted-foreground">Daily Base Rate:</span>
               <span className="font-semibold">₹{car?.pricePerDay} / day</span>
             </div>
             <div className="flex justify-between items-center mb-2">
+              <span className="text-sm text-muted-foreground">Selected Plan:</span>
+              <span className="font-semibold capitalize">{formData.rentalType}</span>
+            </div>
+            <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-muted-foreground">Duration:</span>
-              <span className="font-semibold">{totalDays} Day(s)</span>
+              <span className="font-semibold">
+                {formData.rentalType === "daily" ? `${totalDays} Day(s)` : `${formData.hourlyDuration} Hours`}
+              </span>
             </div>
             <div className="h-px bg-border my-2" />
             <div className="flex justify-between items-center">
