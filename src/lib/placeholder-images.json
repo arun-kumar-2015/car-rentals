@@ -80,38 +80,38 @@
     },
     {
       "id": "maruti-ertiga",
-      "description": "Maruti Suzuki Ertiga silver MPV",
-      "imageUrl": "https://images.unsplash.com/photo-1720070226469-fa9cb4f29b00?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxNUFYlMjBjYXJ8ZW58MHx8fHwxNzcxNTczNDA1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Maruti Suzuki Ertiga full silver MPV view",
+      "imageUrl": "https://images.unsplash.com/photo-1646918257569-65acc5ae4c0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "MPV car"
     },
     {
       "id": "maruti-ertiga-front",
-      "description": "Maruti Ertiga Front View",
-      "imageUrl": "https://images.unsplash.com/photo-1628532442466-9e8023719003?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "description": "Maruti Ertiga Front full View",
+      "imageUrl": "https://images.unsplash.com/photo-1509939136633-1f63ba342d3c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "car front"
     },
     {
       "id": "maruti-ertiga-left",
-      "description": "Maruti Ertiga Left View",
-      "imageUrl": "https://images.unsplash.com/photo-1628532442654-9e8023719003?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "description": "Maruti Ertiga Left full side View",
+      "imageUrl": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "car side"
     },
     {
       "id": "maruti-baleno",
-      "description": "Maruti Suzuki Baleno premium hatchback",
-      "imageUrl": "https://images.unsplash.com/photo-1605270396326-36fa250e661f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8aGF0Y2hiYWNrJTIwY2FyfGVufDB8fHx8MTc3MTUyMjE2Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Maruti Suzuki Baleno premium full hatchback view",
+      "imageUrl": "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "hatchback car"
     },
     {
       "id": "maruti-baleno-front",
-      "description": "Maruti Baleno Front View",
-      "imageUrl": "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "description": "Maruti Baleno Front full View",
+      "imageUrl": "https://images.unsplash.com/photo-1567818738066-39819992cc51?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "car front"
     },
     {
       "id": "maruti-baleno-left",
-      "description": "Maruti Baleno Left View",
-      "imageUrl": "https://images.unsplash.com/photo-1619767886580-efdc259cde1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "description": "Maruti Baleno Left full side View",
+      "imageUrl": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "car side"
     }
   ]
