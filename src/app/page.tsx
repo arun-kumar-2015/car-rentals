@@ -293,7 +293,7 @@ export default function HomePage() {
               {/* Map Placeholder */}
               <div className="mt-10 h-80 w-full rounded-2xl overflow-hidden border border-border bg-background relative shadow-2xl">
                 <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3789.923482390145!2d78.8252!3d18.3888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcc950000000001%3A0x0!2zMTjCsDIzJzE5LjciTiA3OMKwNDknMzAuNyJF!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin&z=18" 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3789.9074!2d78.8242!3d18.3905!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcc9568770807b3%3A0x863339031c034604!2sNew%20Bus%20Stand%20Sircilla!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin&z=17" 
                   width="100%" 
                   height="100%" 
                   style={{ border: 0 }} 
