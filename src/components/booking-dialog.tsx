@@ -3,7 +3,7 @@
 
 import { useState, useMemo } from "react";
 import Image from "next/image";
-import { format, differenceInDays } from "date-fns";
+import { format, differenceInDays, addDays } from "date-fns";
 import { 
   Dialog, 
   DialogContent, 
@@ -35,7 +35,8 @@ import {
 } from "@/firebase";
 import { collection, serverTimestamp } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Calendar, User, Phone, IdCard, MapPin, Clock, Timer } from "lucide-react";
+import { Loader2, Calendar, User, Phone, IdCard, MapPin, Clock, Timer, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Car {
   id: string;
@@ -58,13 +59,13 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     customerName: "",
-    phone: "",
+    phoneNumber: "",
     licenseNumber: "",
     pickupLocation: "",
     rentalType: "daily" as "daily" | "hourly",
     hourlyDuration: "6" as "6" | "12",
     pickupDate: format(new Date(), "yyyy-MM-dd"),
-    returnDate: format(new Date(Date.now() + 86400000), "yyyy-MM-dd"),
+    returnDate: format(addDays(new Date(), 1), "yyyy-MM-dd"),
   });
 
   const totalDays = useMemo(() => {
@@ -102,6 +103,7 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
     try {
       addDocumentNonBlocking(collection(db, "bookings"), {
         ...formData,
+        carId: car.id,
         carName: car.name,
         totalAmount,
         status: "Pending",
@@ -153,12 +155,17 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
 
         <div className="p-6 space-y-6">
           <DialogHeader>
-            <DialogTitle className="text-2xl sm:text-3xl font-headline flex items-center justify-between">
-              <div>Book <span className="text-primary">{car?.name}</span></div>
-              <div className="text-lg sm:text-xl text-primary font-bold">₹{car?.pricePerDay}<span className="text-xs text-muted-foreground">/day</span></div>
-            </DialogTitle>
-            <DialogDescription className="text-muted-foreground text-sm sm:text-base">
-              Choose your rental plan and fill in your details to reserve this vehicle.
+            <div className="flex items-center justify-between">
+              <DialogTitle className="text-2xl sm:text-3xl font-headline">
+                Book <span className="text-primary">{car?.name}</span>
+              </DialogTitle>
+              <div className="text-right">
+                <div className="text-lg sm:text-xl text-primary font-bold">₹{car?.pricePerDay}</div>
+                <div className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">Base Rate / Day</div>
+              </div>
+            </div>
+            <DialogDescription className="text-muted-foreground text-sm">
+              Select your rental type and duration below.
             </DialogDescription>
           </DialogHeader>
           
@@ -167,20 +174,26 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
             className="w-full"
             onValueChange={(val) => setFormData(p => ({ ...p, rentalType: val as any }))}
           >
-            <TabsList className="grid w-full grid-cols-2 mb-6 h-12 bg-secondary/50 p-1">
-              <TabsTrigger value="daily" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-black">
-                <Calendar className="w-4 h-4 mr-2" /> Daily
+            <TabsList className="grid w-full grid-cols-2 mb-8 h-14 bg-secondary/50 p-1.5 rounded-xl">
+              <TabsTrigger 
+                value="daily" 
+                className="font-black uppercase tracking-wider text-xs data-[state=active]:bg-primary data-[state=active]:text-black rounded-lg transition-all"
+              >
+                <Calendar className="w-4 h-4 mr-2" /> Daily Rental
               </TabsTrigger>
-              <TabsTrigger value="hourly" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-black">
-                <Clock className="w-4 h-4 mr-2" /> Hourly
+              <TabsTrigger 
+                value="hourly" 
+                className="font-black uppercase tracking-wider text-xs data-[state=active]:bg-primary data-[state=active]:text-black rounded-lg transition-all"
+              >
+                <Clock className="w-4 h-4 mr-2" /> Hourly Plan
               </TabsTrigger>
             </TabsList>
 
-            <form onSubmit={handleBooking} className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                    <Calendar className="w-3.5 h-3.5 text-primary" /> {formData.rentalType === "daily" ? "Pickup Date" : "Booking Date"}
+            <form onSubmit={handleBooking} className="space-y-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                    <Calendar className="w-3 h-3 text-primary" /> {formData.rentalType === "daily" ? "Pickup Date" : "Booking Date"}
                   </Label>
                   <Input 
                     type="date" 
@@ -188,14 +201,14 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
                     value={formData.pickupDate}
                     onChange={handleChange}
                     required
-                    className="bg-background border-border h-11 focus:ring-primary"
+                    className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
                   />
                 </div>
                 
                 {formData.rentalType === "daily" ? (
-                  <div className="space-y-2">
-                    <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                      <Calendar className="w-3.5 h-3.5 text-primary" /> Return Date
+                  <div className="space-y-3">
+                    <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                      <Calendar className="w-3 h-3 text-primary" /> Return Date
                     </Label>
                     <Input 
                       type="date" 
@@ -203,36 +216,39 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
                       value={formData.returnDate}
                       onChange={handleChange}
                       required
-                      className="bg-background border-border h-11 focus:ring-primary"
+                      className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
                     />
                   </div>
                 ) : (
-                  <div className="space-y-2">
-                    <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                      <Timer className="w-3.5 h-3.5 text-primary" /> Duration
+                  <div className="space-y-3">
+                    <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                      <Timer className="w-3 h-3 text-primary" /> Choose Hours
                     </Label>
-                    <RadioGroup 
-                      value={formData.hourlyDuration} 
-                      onValueChange={(val) => setFormData(p => ({ ...p, hourlyDuration: val as any }))}
-                      className="flex gap-4 pt-1"
-                    >
-                      <div className="flex items-center space-x-2 bg-secondary/30 px-3 py-2 rounded-lg border border-border cursor-pointer">
-                        <RadioGroupItem value="6" id="6hrs" />
-                        <Label htmlFor="6hrs" className="cursor-pointer font-bold">6 Hours</Label>
-                      </div>
-                      <div className="flex items-center space-x-2 bg-secondary/30 px-3 py-2 rounded-lg border border-border cursor-pointer">
-                        <RadioGroupItem value="12" id="12hrs" />
-                        <Label htmlFor="12hrs" className="cursor-pointer font-bold">12 Hours</Label>
-                      </div>
-                    </RadioGroup>
+                    <div className="flex gap-3">
+                      {[6, 12].map((hrs) => (
+                        <button
+                          key={hrs}
+                          type="button"
+                          onClick={() => setFormData(p => ({ ...p, hourlyDuration: hrs.toString() as any }))}
+                          className={cn(
+                            "flex-1 h-12 rounded-lg border font-black text-xs transition-all flex items-center justify-center gap-2",
+                            formData.hourlyDuration === hrs.toString() 
+                              ? "bg-primary text-black border-primary shadow-lg shadow-primary/20" 
+                              : "bg-secondary/30 text-muted-foreground border-border hover:border-primary/50"
+                          )}
+                        >
+                          {hrs} HRS {formData.hourlyDuration === hrs.toString() && <Check className="w-3 h-3" />}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
 
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                    <User className="w-3.5 h-3.5 text-primary" /> Full Name
+              <div className="space-y-5 pt-2 border-t border-border/50">
+                <div className="space-y-3">
+                  <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                    <User className="w-3 h-3 text-primary" /> Full Name
                   </Label>
                   <Input 
                     placeholder="Enter your name"
@@ -240,27 +256,27 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
                     value={formData.customerName}
                     onChange={handleChange}
                     required
-                    className="bg-background border-border h-11 focus:ring-primary"
+                    className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                      <Phone className="w-3.5 h-3.5 text-primary" /> Phone Number
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="space-y-3">
+                    <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                      <Phone className="w-3 h-3 text-primary" /> Phone Number
                     </Label>
                     <Input 
                       placeholder="+91 00000 00000"
-                      name="phone"
-                      value={formData.phone}
+                      name="phoneNumber"
+                      value={formData.phoneNumber}
                       onChange={handleChange}
                       required
-                      className="bg-background border-border h-11 focus:ring-primary"
+                      className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                      <IdCard className="w-3.5 h-3.5 text-primary" /> License Number
+                  <div className="space-y-3">
+                    <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                      <IdCard className="w-3 h-3 text-primary" /> License Number
                     </Label>
                     <Input 
                       placeholder="DL-XXXXXXXXXXXX"
@@ -268,14 +284,14 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
                       value={formData.licenseNumber}
                       onChange={handleChange}
                       required
-                      className="bg-background border-border h-11 focus:ring-primary"
+                      className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                    <MapPin className="w-3.5 h-3.5 text-primary" /> Pickup Location
+                <div className="space-y-3">
+                  <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                    <MapPin className="w-3 h-3 text-primary" /> Pickup Location
                   </Label>
                   <Input 
                     placeholder="Area/City for pickup"
@@ -283,30 +299,31 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
                     value={formData.pickupLocation}
                     onChange={handleChange}
                     required
-                    className="bg-background border-border h-11 focus:ring-primary"
+                    className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all"
                   />
                 </div>
               </div>
 
-              <div className="bg-secondary/40 p-5 rounded-2xl border border-border space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Rental Plan:</span>
-                  <span className="font-bold capitalize">{formData.rentalType}</span>
+              <div className="bg-primary/5 p-6 rounded-2xl border border-primary/20 space-y-4">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-muted-foreground font-bold uppercase tracking-widest">Plan Details:</span>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="bg-background/50 border-primary/20 text-primary uppercase font-black text-[10px]">
+                      {formData.rentalType}
+                    </Badge>
+                    <Badge variant="secondary" className="bg-primary text-black font-black text-[10px]">
+                      {formData.rentalType === "daily" ? `${totalDays} Day(s)` : `${formData.hourlyDuration} Hours`}
+                    </Badge>
+                  </div>
                 </div>
+                <div className="h-px bg-primary/10" />
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Duration:</span>
-                  <span className="font-bold">
-                    {formData.rentalType === "daily" ? `${totalDays} Day(s)` : `${formData.hourlyDuration} Hours`}
-                  </span>
-                </div>
-                <div className="h-px bg-border my-2" />
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold">Total Payable:</span>
+                  <span className="text-sm font-black uppercase tracking-widest">Total Payable:</span>
                   <span className="text-3xl font-black text-primary yellow-glow">₹{totalAmount.toLocaleString()}</span>
                 </div>
               </div>
 
-              <Button type="submit" className="w-full h-14 text-xl font-headline font-black uppercase tracking-widest" disabled={loading}>
+              <Button type="submit" className="w-full h-16 text-xl font-black uppercase tracking-[0.15em] rounded-xl shadow-xl shadow-primary/20 active:scale-[0.98] transition-all" disabled={loading}>
                 {loading ? <Loader2 className="w-6 h-6 animate-spin mr-2" /> : "Confirm Booking"}
               </Button>
             </form>
