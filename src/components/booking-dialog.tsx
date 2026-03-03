@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { format, differenceInDays, addDays } from "date-fns";
 import { 
@@ -27,7 +27,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Badge } from "@/components/ui/badge";
 import { 
   useFirestore, 
@@ -51,9 +50,17 @@ interface BookingDialogProps {
   car: Car | null;
   isOpen: boolean;
   onClose: () => void;
+  initialRentalType?: "daily" | "hourly";
+  initialHourlyDuration?: "6" | "12";
 }
 
-export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
+export function BookingDialog({ 
+  car, 
+  isOpen, 
+  onClose, 
+  initialRentalType = "daily", 
+  initialHourlyDuration = "6" 
+}: BookingDialogProps) {
   const { toast } = useToast();
   const db = useFirestore();
   const [loading, setLoading] = useState(false);
@@ -62,11 +69,24 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
     phoneNumber: "",
     licenseNumber: "",
     pickupLocation: "",
-    rentalType: "daily" as "daily" | "hourly",
-    hourlyDuration: "6" as "6" | "12",
+    rentalType: initialRentalType,
+    hourlyDuration: initialHourlyDuration,
     pickupDate: format(new Date(), "yyyy-MM-dd"),
     returnDate: format(addDays(new Date(), 1), "yyyy-MM-dd"),
   });
+
+  // Reset form data when dialog opens with initial values
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(prev => ({
+        ...prev,
+        rentalType: initialRentalType,
+        hourlyDuration: initialHourlyDuration,
+        pickupDate: format(new Date(), "yyyy-MM-dd"),
+        returnDate: format(addDays(new Date(), 1), "yyyy-MM-dd"),
+      }));
+    }
+  }, [isOpen, initialRentalType, initialHourlyDuration]);
 
   const totalDays = useMemo(() => {
     const start = new Date(formData.pickupDate);
@@ -117,7 +137,7 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
       });
       onClose();
     } catch (error) {
-      // Errors are handled by the non-blocking architecture
+      // Error handling by non-blocking pattern
     } finally {
       setLoading(false);
     }
@@ -156,21 +176,21 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
         <div className="p-6 space-y-6">
           <DialogHeader>
             <div className="flex items-center justify-between">
-              <DialogTitle className="text-2xl sm:text-3xl font-headline">
-                Book <span className="text-primary">{car?.name}</span>
+              <DialogTitle className="text-2xl sm:text-3xl font-headline uppercase font-black tracking-tight">
+                {car?.name}
               </DialogTitle>
               <div className="text-right">
-                <div className="text-lg sm:text-xl text-primary font-bold">₹{car?.pricePerDay}</div>
-                <div className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">Base Rate / Day</div>
+                <div className="text-lg sm:text-xl text-primary font-black">₹{totalAmount.toLocaleString()}</div>
+                <div className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">Estimated Total</div>
               </div>
             </div>
             <DialogDescription className="text-muted-foreground text-sm">
-              Select your rental type and duration below.
+              Confirm your rental details for the {formData.rentalType} plan.
             </DialogDescription>
           </DialogHeader>
           
           <Tabs 
-            defaultValue="daily" 
+            value={formData.rentalType} 
             className="w-full"
             onValueChange={(val) => setFormData(p => ({ ...p, rentalType: val as any }))}
           >
@@ -179,7 +199,7 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
                 value="daily" 
                 className="font-black uppercase tracking-wider text-xs data-[state=active]:bg-primary data-[state=active]:text-black rounded-lg transition-all"
               >
-                <Calendar className="w-4 h-4 mr-2" /> Daily Rental
+                <Calendar className="w-4 h-4 mr-2" /> Daily Plan
               </TabsTrigger>
               <TabsTrigger 
                 value="hourly" 
@@ -222,22 +242,22 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
                 ) : (
                   <div className="space-y-3">
                     <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                      <Timer className="w-3 h-3 text-primary" /> Choose Hours
+                      <Timer className="w-3 h-3 text-primary" /> Duration
                     </Label>
                     <div className="flex gap-3">
-                      {[6, 12].map((hrs) => (
+                      {["6", "12"].map((hrs) => (
                         <button
                           key={hrs}
                           type="button"
-                          onClick={() => setFormData(p => ({ ...p, hourlyDuration: hrs.toString() as any }))}
+                          onClick={() => setFormData(p => ({ ...p, hourlyDuration: hrs as any }))}
                           className={cn(
                             "flex-1 h-12 rounded-lg border font-black text-xs transition-all flex items-center justify-center gap-2",
-                            formData.hourlyDuration === hrs.toString() 
+                            formData.hourlyDuration === hrs 
                               ? "bg-primary text-black border-primary shadow-lg shadow-primary/20" 
                               : "bg-secondary/30 text-muted-foreground border-border hover:border-primary/50"
                           )}
                         >
-                          {hrs} HRS {formData.hourlyDuration === hrs.toString() && <Check className="w-3 h-3" />}
+                          {hrs} HRS {formData.hourlyDuration === hrs && <Check className="w-3 h-3" />}
                         </button>
                       ))}
                     </div>
@@ -304,9 +324,9 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
                 </div>
               </div>
 
-              <div className="bg-primary/5 p-6 rounded-2xl border border-primary/20 space-y-4">
-                <div className="flex justify-between items-center text-xs">
-                  <span className="text-muted-foreground font-bold uppercase tracking-widest">Plan Details:</span>
+              <div className="bg-primary/5 p-6 rounded-2xl border border-primary/20 flex justify-between items-center">
+                <div className="space-y-1">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Rental Summary</span>
                   <div className="flex items-center gap-2">
                     <Badge variant="outline" className="bg-background/50 border-primary/20 text-primary uppercase font-black text-[10px]">
                       {formData.rentalType}
@@ -316,15 +336,14 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
                     </Badge>
                   </div>
                 </div>
-                <div className="h-px bg-primary/10" />
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-black uppercase tracking-widest">Total Payable:</span>
-                  <span className="text-3xl font-black text-primary yellow-glow">₹{totalAmount.toLocaleString()}</span>
+                <div className="text-right">
+                  <div className="text-2xl font-black text-primary yellow-glow">₹{totalAmount.toLocaleString()}</div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Final Price</div>
                 </div>
               </div>
 
               <Button type="submit" className="w-full h-16 text-xl font-black uppercase tracking-[0.15em] rounded-xl shadow-xl shadow-primary/20 active:scale-[0.98] transition-all" disabled={loading}>
-                {loading ? <Loader2 className="w-6 h-6 animate-spin mr-2" /> : "Confirm Booking"}
+                {loading ? <Loader2 className="w-6 h-6 animate-spin mr-2" /> : "Confirm My Booking"}
               </Button>
             </form>
           </Tabs>

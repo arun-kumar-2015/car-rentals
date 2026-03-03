@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -18,7 +19,9 @@ import {
   ArrowRight,
   Shield,
   Clock,
-  Wallet
+  Wallet,
+  Timer,
+  Calendar
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -98,9 +101,13 @@ const CARS = [
 export default function HomePage() {
   const [selectedCar, setSelectedCar] = useState<typeof CARS[0] | null>(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [initialRentalType, setInitialRentalType] = useState<"daily" | "hourly">("daily");
+  const [initialHourlyDuration, setInitialHourlyDuration] = useState<"6" | "12">("6");
 
-  const openBooking = (car: typeof CARS[0]) => {
+  const openBooking = (car: typeof CARS[0], type: "daily" | "hourly" = "daily", duration: "6" | "12" = "6") => {
     setSelectedCar(car);
+    setInitialRentalType(type);
+    setInitialHourlyDuration(duration);
     setIsBookingOpen(true);
   };
 
@@ -110,7 +117,7 @@ export default function HomePage() {
     <main className="min-h-screen">
       <Navbar />
       
-      {/* Hero Section - Using SVH for mobile browser compatibility */}
+      {/* Hero Section */}
       <section id="home" className="relative min-h-[100svh] flex items-center overflow-hidden bg-black">
         <div className="absolute inset-0 z-0">
           <Image 
@@ -145,7 +152,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats/Why Us Section */}
+      {/* Stats Section */}
       <section className="py-12 sm:py-16 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
@@ -197,47 +204,69 @@ export default function HomePage() {
               Our <span className="text-primary">Fleet</span>
             </h2>
             <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto">
-              Choose from our selection of premium vehicles tailored to your journey.
+              Select your car and rental duration to get started.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {CARS.map((car) => (
-              <div key={car.id} className="premium-card rounded-2xl overflow-hidden flex flex-col h-full group">
-                <div className="relative h-48 sm:h-56 overflow-hidden">
+              <div key={car.id} className="premium-card rounded-3xl overflow-hidden flex flex-col h-full group border-border shadow-2xl">
+                <div className="relative h-56 sm:h-64 overflow-hidden">
                   <Image 
                     src={car.image}
                     alt={car.name}
                     fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
                     data-ai-hint="car model"
                   />
-                  <div className="absolute top-4 right-4">
-                    <Badge className="bg-primary text-primary-foreground font-bold shadow-lg">₹{car.pricePerDay}/day</Badge>
+                  <div className="absolute top-4 left-4">
+                    <Badge className="bg-primary text-primary-foreground font-black px-3 py-1 text-xs">₹{car.pricePerDay}/day</Badge>
                   </div>
                 </div>
                 
-                <div className="p-6 flex-grow flex flex-col">
-                  <h3 className="text-xl font-bold mb-4">{car.name}</h3>
+                <div className="p-8 flex-grow flex flex-col">
+                  <div className="flex justify-between items-start mb-6">
+                    <h3 className="text-2xl font-black uppercase tracking-tight">{car.name}</h3>
+                    <div className="flex items-center gap-1 text-primary">
+                      <Zap className="w-4 h-4 fill-primary" />
+                      <span className="text-[10px] font-black uppercase tracking-widest">Premium</span>
+                    </div>
+                  </div>
                   
-                  <div className="grid grid-cols-2 gap-y-3 mb-6 text-sm text-muted-foreground">
+                  <div className="grid grid-cols-2 gap-y-4 mb-8 text-sm text-muted-foreground">
                     <div className="flex items-center gap-2">
                       <Fuel className="w-4 h-4 text-primary" /> {car.fuel}
                     </div>
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4 text-primary" /> {car.seats} Seats
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Zap className="w-4 h-4 text-primary" /> {car.transmission}
-                    </div>
                   </div>
 
-                  <Button 
-                    className="w-full mt-auto font-bold uppercase tracking-wider h-12"
-                    onClick={() => openBooking(car)}
-                  >
-                    View & Book
-                  </Button>
+                  <div className="space-y-3 mt-auto">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Choose Rental Duration</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button 
+                        variant="outline"
+                        className="h-12 border-border hover:border-primary hover:bg-primary/5 font-bold text-xs uppercase transition-all"
+                        onClick={() => openBooking(car, "hourly", "6")}
+                      >
+                        <Timer className="w-4 h-4 mr-2 text-primary" /> 6 Hours
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        className="h-12 border-border hover:border-primary hover:bg-primary/5 font-bold text-xs uppercase transition-all"
+                        onClick={() => openBooking(car, "hourly", "12")}
+                      >
+                        <Timer className="w-4 h-4 mr-2 text-primary" /> 12 Hours
+                      </Button>
+                    </div>
+                    <Button 
+                      className="w-full h-14 font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/10"
+                      onClick={() => openBooking(car, "daily")}
+                    >
+                      <Calendar className="w-4 h-4 mr-2" /> Book Full Day(s)
+                    </Button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -289,10 +318,9 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Map - Ensuring aspect ratio on mobile */}
               <div className="mt-8 sm:mt-10 aspect-video sm:h-80 w-full rounded-2xl overflow-hidden border border-border bg-background relative shadow-2xl">
                 <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3789.9074!2d78.8242!3d18.3905!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcc9568770807b3%3A0x863339031c034604!2sNew%20Bus%20Stand%20Sircilla!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin&z=19" 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d473.7441589139265!2d78.8241477!3d18.390463!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcc9568770807b3%3A0x863339031c034604!2sNew%20Bus%20Stand%20Sircilla!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin&z=19" 
                   width="100%" 
                   height="100%" 
                   style={{ border: 0 }} 
@@ -359,6 +387,8 @@ export default function HomePage() {
         car={selectedCar} 
         isOpen={isBookingOpen} 
         onClose={() => setIsBookingOpen(false)} 
+        initialRentalType={initialRentalType}
+        initialHourlyDuration={initialHourlyDuration}
       />
     </main>
   );
