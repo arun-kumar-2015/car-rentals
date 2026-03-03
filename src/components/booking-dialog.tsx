@@ -22,8 +22,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { db } from "@/lib/firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { Badge } from "@/components/ui/badge";
+import { 
+  useFirestore, 
+  addDocumentNonBlocking 
+} from "@/firebase";
+import { collection, serverTimestamp } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Calendar, User, Phone, IdCard, MapPin, Clock } from "lucide-react";
 
@@ -44,6 +48,7 @@ interface BookingDialogProps {
 
 export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
   const { toast } = useToast();
+  const db = useFirestore();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     customerName: "",
@@ -84,11 +89,11 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
 
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!car) return;
+    if (!car || !db) return;
 
     setLoading(true);
     try {
-      await addDoc(collection(db, "bookings"), {
+      addDocumentNonBlocking(collection(db, "bookings"), {
         ...formData,
         carName: car.name,
         totalAmount,
@@ -103,12 +108,7 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
       });
       onClose();
     } catch (error) {
-      console.error("Booking error:", error);
-      toast({
-        variant: "destructive",
-        title: "Booking Failed",
-        description: "Something went wrong. Please try again later.",
-      });
+      // Errors are handled by the non-blocking architecture
     } finally {
       setLoading(false);
     }

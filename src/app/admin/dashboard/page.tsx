@@ -1,11 +1,19 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase";
+import { signOut } from "firebase/auth";
+import { collection, query, orderBy, doc } from "firebase/firestore";
+import { 
+  useAuth, 
+  useFirestore, 
+  useUser, 
+  useCollection, 
+  useMemoFirebase,
+  updateDocumentNonBlocking,
+  deleteDocumentNonBlocking
+} from "@/firebase";
 import { Button } from "@/components/ui/button";
 import { 
   Table, 
@@ -60,52 +68,36 @@ interface Booking {
 }
 
 export default function AdminDashboard() {
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { user, isUserLoading } = useUser();
+  const auth = useAuth();
+  const db = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
 
+  const bookingsQuery = useMemoFirebase(() => {
+    if (!db) return null;
+    return query(collection(db, "bookings"), orderBy("timestamp", "desc"));
+  }, [db]);
+
+  const { data: bookingsData, isLoading: isBookingsLoading } = useCollection<Booking>(bookingsQuery);
+
   useEffect(() => {
-    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-      if (!user) router.push("/admin/login");
-    });
-
-    const q = query(collection(db, "bookings"), orderBy("timestamp", "desc"));
-    const unsubscribeBookings = onSnapshot(q, (snapshot) => {
-      const bookingsData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Booking[];
-      setBookings(bookingsData);
-      setLoading(false);
-    }, (error) => {
-      console.error("Fetch error:", error);
-      setLoading(false);
-    });
-
-    return () => {
-      unsubscribeAuth();
-      unsubscribeBookings();
-    };
-  }, [router]);
-
-  const updateStatus = async (id: string, newStatus: Booking["status"]) => {
-    try {
-      await updateDoc(doc(db, "bookings", id), { status: newStatus });
-      toast({ title: "Status Updated", description: `Booking is now ${newStatus}.` });
-    } catch (error) {
-      toast({ variant: "destructive", title: "Error", description: "Failed to update status." });
+    if (!isUserLoading && !user) {
+      router.push("/admin/login");
     }
+  }, [user, isUserLoading, router]);
+
+  const updateStatus = (id: string, newStatus: Booking["status"]) => {
+    const docRef = doc(db, "bookings", id);
+    updateDocumentNonBlocking(docRef, { status: newStatus });
+    toast({ title: "Status Updated", description: `Booking is now ${newStatus}.` });
   };
 
-  const deleteBooking = async (id: string) => {
+  const deleteBooking = (id: string) => {
     if (!confirm("Are you sure you want to delete this booking?")) return;
-    try {
-      await deleteDoc(doc(db, "bookings", id));
-      toast({ title: "Booking Deleted", description: "The record has been removed." });
-    } catch (error) {
-      toast({ variant: "destructive", title: "Error", description: "Failed to delete booking." });
-    }
+    const docRef = doc(db, "bookings", id);
+    deleteDocumentNonBlocking(docRef);
+    toast({ title: "Booking Deleted", description: "The record has been removed." });
   };
 
   const handleLogout = async () => {
@@ -121,7 +113,7 @@ export default function AdminDashboard() {
     }
   };
 
-  if (loading) {
+  if (isUserLoading || isBookingsLoading) {
     return (
       <div className="h-screen flex items-center justify-center bg-background">
         <Loader2 className="w-10 h-10 animate-spin text-primary" />
@@ -129,9 +121,10 @@ export default function AdminDashboard() {
     );
   }
 
+  const bookings = bookingsData || [];
+
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="border-b border-border bg-card sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <h1 className="text-xl font-headline font-bold uppercase tracking-tight flex items-center gap-2">
@@ -145,7 +138,6 @@ export default function AdminDashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Summary Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card className="bg-card border-border">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -185,7 +177,6 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
-        {/* Bookings Table */}
         <Card className="bg-card border-border overflow-hidden">
           <CardHeader>
             <CardTitle>Recent Bookings</CardTitle>
