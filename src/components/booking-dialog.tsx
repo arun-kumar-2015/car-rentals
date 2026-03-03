@@ -277,36 +277,7 @@ export function BookingDialog({
 
                 <form onSubmit={handleBooking} className="space-y-8">
                   <TabsContent value="daily" className="mt-0 space-y-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      <div className="space-y-3">
-                        <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                          <Calendar className="w-3 h-3 text-primary" /> Pickup Date
-                        </Label>
-                        <Input 
-                          type="date" 
-                          name="pickupDate"
-                          value={formData.pickupDate}
-                          onChange={handleChange}
-                          required
-                          className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
-                        />
-                      </div>
-                      <div className="space-y-3">
-                        <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                          <Calendar className="w-3 h-3 text-primary" /> Return Date
-                        </Label>
-                        <Input 
-                          type="date" 
-                          name="returnDate"
-                          value={formData.returnDate}
-                          onChange={handleChange}
-                          required
-                          min={formData.pickupDate}
-                          className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
-                        />
-                      </div>
-                    </div>
-
+                    {/* Duration First */}
                     <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="space-y-1">
                         <Label className="text-xs font-black uppercase tracking-widest text-primary">Rental Duration</Label>
@@ -337,23 +308,40 @@ export function BookingDialog({
                         </Button>
                       </div>
                     </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="space-y-3">
+                        <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                          <Calendar className="w-3 h-3 text-primary" /> Pickup Date
+                        </Label>
+                        <Input 
+                          type="date" 
+                          name="pickupDate"
+                          value={formData.pickupDate}
+                          onChange={handleChange}
+                          required
+                          className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                          <Calendar className="w-3 h-3 text-primary" /> Return Date
+                        </Label>
+                        <Input 
+                          type="date" 
+                          name="returnDate"
+                          value={formData.returnDate}
+                          onChange={handleChange}
+                          required
+                          min={formData.pickupDate}
+                          className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                        />
+                      </div>
+                    </div>
                   </TabsContent>
 
                   <TabsContent value="hourly" className="mt-0 space-y-6">
-                    <div className="space-y-3">
-                      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                        <Calendar className="w-3 h-3 text-primary" /> Pickup Date
-                      </Label>
-                      <Input 
-                        type="date" 
-                        name="pickupDate"
-                        value={formData.pickupDate}
-                        onChange={handleChange}
-                        required
-                        className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
-                      />
-                    </div>
-
+                    {/* Duration First */}
                     <div className="space-y-4">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary">
                         <Timer className="w-4 h-4" /> Select Hourly Plan
@@ -381,6 +369,20 @@ export function BookingDialog({
                           </button>
                         ))}
                       </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                        <Calendar className="w-3 h-3 text-primary" /> Pickup Date
+                      </Label>
+                      <Input 
+                        type="date" 
+                        name="pickupDate"
+                        value={formData.pickupDate}
+                        onChange={handleChange}
+                        required
+                        className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                      />
                     </div>
                   </TabsContent>
 
@@ -428,6 +430,7 @@ export function BookingDialog({
                       </div>
                     </div>
 
+                    {/* License Photo above Pickup Location */}
                     <div className="space-y-3">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
                         <Camera className="w-3 h-3 text-primary" /> Driving License Photo
