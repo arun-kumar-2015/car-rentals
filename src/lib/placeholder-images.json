@@ -44,9 +44,9 @@
     },
     {
       "id": "mahindra-thar",
-      "description": "Mahindra Thar rugged 4x4 offroader",
-      "imageUrl": "https://images.unsplash.com/photo-1650303417855-e6220f0e564f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxvZmZyb2FkJTIwamVlcHxlbnwwfHx8fDE3NzE1NjE5NTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "offroad jeep"
+      "description": "Red Mahindra Thar rugged 4x4 offroader",
+      "imageUrl": "https://images.unsplash.com/photo-1681389420082-2a74c7e63833?q=80&w=1080&auto=format&fit=crop",
+      "imageHint": "red jeep"
     },
     {
       "id": "mahindra-thar-front",
