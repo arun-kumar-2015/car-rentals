@@ -156,7 +156,7 @@ export function BookingDialog({
   };
 
   const notifyViaWhatsApp = () => {
-    const ownerNumber = "919876543210"; // REPLACE WITH ACTUAL OWNER NUMBER
+    const ownerNumber = "919876543210"; // Owner's WhatsApp Number
     const message = `*NEW CAR BOOKING*%0A------------------%0A*Car:* ${car?.name}%0A*Customer:* ${formData.customerName}%0A*Phone:* ${formData.phoneNumber}%0A*Plan:* ${durationLabel}%0A*Pickup:* ${formData.pickupDate}%0A*Amount:* ₹${totalAmount}%0A*Location:* ${formData.pickupLocation}%0A------------------%0APlease confirm the booking.`;
     window.open(`https://wa.me/${ownerNumber}?text=${message}`, "_blank");
   };
@@ -216,7 +216,7 @@ export function BookingDialog({
                   </div>
                 </div>
                 <DialogDescription className="text-muted-foreground text-sm font-medium">
-                  Complete the form below to book your vehicle.
+                  Choose your duration first, then select the date.
                 </DialogDescription>
               </DialogHeader>
               
@@ -242,10 +242,10 @@ export function BookingDialog({
 
                 <form onSubmit={handleBooking} className="space-y-8">
                   <TabsContent value="daily" className="mt-0 space-y-6">
-                    {/* Duration selection ABOVE date selection */}
+                    {/* Duration selection ABOVE Dates */}
                     <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="space-y-1">
-                        <Label className="text-xs font-black uppercase tracking-widest text-primary">Rent for Multiple Days</Label>
+                        <Label className="text-xs font-black uppercase tracking-widest text-primary">How many Days?</Label>
                         <p className="text-[10px] text-muted-foreground uppercase font-bold">Use +/- to set duration</p>
                       </div>
                       <div className="flex items-center gap-6 bg-background p-3 rounded-xl border border-border self-end sm:self-auto shadow-sm">
@@ -306,10 +306,10 @@ export function BookingDialog({
                   </TabsContent>
 
                   <TabsContent value="hourly" className="mt-0 space-y-6">
-                    {/* Duration selection ABOVE date selection */}
+                    {/* Duration selection ABOVE Date */}
                     <div className="space-y-4">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary">
-                        <Timer className="w-4 h-4" /> Select Hourly Duration
+                        <Timer className="w-4 h-4" /> Select Plan (6 or 12 Hours)
                       </Label>
                       <div className="grid grid-cols-2 gap-4">
                         {["6", "12"].map((hrs) => (
@@ -318,17 +318,17 @@ export function BookingDialog({
                             type="button"
                             onClick={() => setFormData(p => ({ ...p, hourlyDuration: hrs as any }))}
                             className={cn(
-                              "relative h-16 rounded-2xl border-2 font-black transition-all flex flex-col items-center justify-center gap-1",
+                              "relative h-20 rounded-2xl border-2 font-black transition-all flex flex-col items-center justify-center gap-1",
                               formData.hourlyDuration === hrs 
-                                ? "bg-primary/10 border-primary text-primary shadow-[0_0_20px_rgba(255,234,0,0.15)]" 
+                                ? "bg-primary/10 border-primary text-primary shadow-[0_0_25px_rgba(255,234,0,0.2)] scale-[1.02]" 
                                 : "bg-secondary/20 text-muted-foreground border-border hover:border-primary/50"
                             )}
                           >
-                            <span className="text-xl leading-none">{hrs}</span>
+                            <span className="text-2xl leading-none">{hrs}</span>
                             <span className="text-[10px] uppercase tracking-widest">Hours</span>
                             {formData.hourlyDuration === hrs && (
-                              <div className="absolute top-2 right-2 bg-primary text-black rounded-full p-0.5">
-                                <Check className="w-3 h-3" />
+                              <div className="absolute -top-2 -right-2 bg-primary text-black rounded-full p-1 shadow-lg">
+                                <Check className="w-4 h-4" />
                               </div>
                             )}
                           </button>
@@ -338,7 +338,7 @@ export function BookingDialog({
 
                     <div className="space-y-3">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                        <Calendar className="w-3 h-3 text-primary" /> Preferred Date
+                        <Calendar className="w-3 h-3 text-primary" /> Pickup Date
                       </Label>
                       <Input 
                         type="date" 
@@ -351,6 +351,7 @@ export function BookingDialog({
                     </div>
                   </TabsContent>
 
+                  {/* Customer Information */}
                   <div className="space-y-5 pt-4 border-t border-border">
                     <div className="space-y-3">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
@@ -410,18 +411,19 @@ export function BookingDialog({
                     </div>
                   </div>
 
+                  {/* Summary Box */}
                   <div className="bg-primary/5 p-6 rounded-2xl border border-primary/20 flex justify-between items-center shadow-inner">
-                    <div className="space-y-2">
+                    <div className="space-y-1">
                       <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Booking Plan</span>
                       <div className="flex items-center gap-2">
-                        <Badge variant="secondary" className="bg-primary text-black font-black text-[10px] px-3 py-1">
+                        <Badge variant="secondary" className="bg-primary text-black font-black text-[11px] px-3 py-1">
                           {durationLabel}
                         </Badge>
                       </div>
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-black text-primary yellow-glow">₹{totalAmount.toLocaleString()}</div>
-                      <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Total Price</div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Total Estimate</div>
                     </div>
                   </div>
 
@@ -441,7 +443,7 @@ export function BookingDialog({
               <h2 className="text-3xl font-black uppercase tracking-tight">Booking Successful!</h2>
               <p className="text-muted-foreground text-sm font-medium">
                 Your request for the <strong>{car?.name}</strong> has been received. 
-                Please notify the owner to speed up confirmation.
+                Please notify the owner via WhatsApp to confirm instantly.
               </p>
             </div>
             
@@ -450,7 +452,7 @@ export function BookingDialog({
                 onClick={notifyViaWhatsApp} 
                 className="w-full h-16 bg-green-600 hover:bg-green-700 text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-green-600/20 flex items-center justify-center gap-3"
               >
-                <MessageSquare className="w-6 h-6" /> Notify Owner via WhatsApp
+                <MessageSquare className="w-6 h-6" /> Notify Owner on WhatsApp
               </Button>
               <Button variant="outline" onClick={onClose} className="w-full h-12 font-bold uppercase tracking-widest rounded-xl border-border">
                 Close & Return
