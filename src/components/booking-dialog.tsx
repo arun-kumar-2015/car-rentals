@@ -73,6 +73,7 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
     if (formData.rentalType === "daily") {
       return car.pricePerDay * totalDays;
     } else {
+      // 6 hours = 40% of daily price, 12 hours = 70% of daily price
       const factor = formData.hourlyDuration === "6" ? 0.4 : 0.7;
       return Math.round(car.pricePerDay * factor);
     }
@@ -131,6 +132,7 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
                     alt={`${car?.name} ${img.label}`} 
                     fill 
                     className="object-cover"
+                    unoptimized={img.url.includes('picsum.photos')}
                   />
                   <div className="absolute bottom-4 left-4">
                     <Badge variant="secondary" className="bg-black/60 text-white border-none">{img.label}</Badge>
@@ -150,7 +152,7 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
               <div className="text-xl text-primary font-bold">₹{car?.pricePerDay}<span className="text-sm text-muted-foreground">/day</span></div>
             </DialogTitle>
             <DialogDescription className="text-muted-foreground text-base">
-              Complete the form below to reserve your vehicle from our premium fleet.
+              Complete the form below to reserve your vehicle. Choose between daily or hourly rental plans.
             </DialogDescription>
           </DialogHeader>
           

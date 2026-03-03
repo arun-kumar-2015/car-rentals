@@ -85,6 +85,24 @@
           "type": "string",
           "description": "Reference to the Car entity that is being booked."
         },
+        "carName": {
+          "type": "string",
+          "description": "The name of the car booked."
+        },
+        "rentalType": {
+          "type": "string",
+          "enum": ["daily", "hourly"],
+          "description": "Whether the booking is for full days or specific hours."
+        },
+        "hourlyDuration": {
+          "type": "string",
+          "enum": ["6", "12"],
+          "description": "The number of hours for hourly rentals."
+        },
+        "durationLabel": {
+          "type": "string",
+          "description": "Formatted string representing the rental duration (e.g., '2 Days' or '6 Hours')."
+        },
         "pickupDate": {
           "type": "string",
           "description": "The scheduled date and time for picking up the car.",
@@ -92,7 +110,7 @@
         },
         "returnDate": {
           "type": "string",
-          "description": "The scheduled date and time for returning the car.",
+          "description": "The scheduled date and time for returning the car (for daily rentals).",
           "format": "date-time"
         },
         "pickupLocation": {
@@ -117,14 +135,10 @@
         "id",
         "customerName",
         "phoneNumber",
-        "licenseNumber",
-        "carId",
-        "pickupDate",
-        "returnDate",
-        "pickupLocation",
+        "carName",
+        "rentalType",
         "totalAmount",
-        "status",
-        "timestamp"
+        "status"
       ]
     }
   },
@@ -135,58 +149,26 @@
     ]
   },
   "firestore": {
-    "structure": [
-      {
-        "path": "/cars/{carId}",
-        "definition": {
-          "entityName": "Car",
-          "schema": {
-            "$ref": "#/backend/entities/Car"
-          },
-          "description": "Stores details about each available car.",
-          "params": [
-            {
-              "name": "carId",
-              "description": "The unique identifier for a specific car."
-            }
-          ]
+    "/cars/{carId}": {
+      "schema": {
+        "$ref": "#/backend/entities/Car"
+      },
+      "description": "Stores details about each available car."
+    },
+    "/bookings/{bookingId}": {
+      "schema": {
+        "$ref": "#/backend/entities/Booking"
+      },
+      "description": "Contains records of car rental bookings."
+    },
+    "/roles_admin/{adminId}": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "uid": { "type": "string" }
         }
       },
-      {
-        "path": "/bookings/{bookingId}",
-        "definition": {
-          "entityName": "Booking",
-          "schema": {
-            "$ref": "#/backend/entities/Booking"
-          },
-          "description": "Contains records of car rental bookings.",
-          "params": [
-            {
-              "name": "bookingId",
-              "description": "The unique identifier for a specific booking."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/roles_admin/{adminId}",
-        "definition": {
-          "entityName": "AdminRole",
-          "schema": {
-            "type": "object",
-            "properties": {
-              "uid": { "type": "string" }
-            }
-          },
-          "description": "Identifies users with administrator privileges.",
-          "params": [
-            {
-              "name": "adminId",
-              "description": "The Firebase Authentication UID of an admin."
-            }
-          ]
-        }
-      }
-    ]
+      "description": "Identifies users with administrator privileges."
+    }
   }
 }

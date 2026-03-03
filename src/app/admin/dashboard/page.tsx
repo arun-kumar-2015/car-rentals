@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect } from "react";
@@ -73,7 +74,6 @@ export default function AdminDashboard() {
   const router = useRouter();
   const { toast } = useToast();
 
-  // Fix: Only create the query if the user is authenticated to avoid permission errors
   const bookingsQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
     return query(collection(db, "bookings"), orderBy("timestamp", "desc"));
@@ -278,7 +278,6 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
       </main>
-      {/* Mobile spacing for floating buttons if any */}
       <div className="h-8 pb-safe" />
     </div>
   );
