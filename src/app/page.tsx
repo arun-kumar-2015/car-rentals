@@ -285,8 +285,10 @@ export default function HomePage() {
                   </div>
                   <div>
                     <h4 className="font-bold text-base sm:text-lg">WhatsApp</h4>
-                    <Button variant="link" className="p-0 h-auto text-primary hover:text-primary/80 text-sm sm:text-base">
-                      Chat with us now <ArrowRight className="ml-1 w-4 h-4" />
+                    <Button variant="link" className="p-0 h-auto text-primary hover:text-primary/80 text-sm sm:text-base" asChild>
+                      <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
+                        Chat with us now <ArrowRight className="ml-1 w-4 h-4" />
+                      </a>
                     </Button>
                   </div>
                 </div>
