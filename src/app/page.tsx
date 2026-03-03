@@ -54,6 +54,17 @@ const CARS = [
     leftImage: "https://picsum.photos/seed/22/600/400"
   },
   {
+    id: "maruti-ertiga",
+    name: "Maruti Ertiga",
+    pricePerDay: 3800,
+    fuel: "Petrol/CNG",
+    seats: 7,
+    transmission: "Manual",
+    image: PlaceHolderImages.find(img => img.id === "maruti-ertiga")?.imageUrl || "https://picsum.photos/seed/6/600/400",
+    frontImage: "https://picsum.photos/seed/61/600/400",
+    leftImage: "https://picsum.photos/seed/62/600/400"
+  },
+  {
     id: "innova-crysta",
     name: "Innova Crysta",
     pricePerDay: 4500,

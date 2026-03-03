@@ -20,21 +20,27 @@
     },
     {
       "id": "innova-crysta",
-      "description": "Toyota Innova Crysta luxury MUV silver color professional automotive photography",
+      "description": "Toyota Innova Crysta white MUV side view realistic automotive photography",
       "imageUrl": "https://images.unsplash.com/photo-1583121274602-3e2820c69888?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      "imageHint": "silver MUV"
+      "imageHint": "Toyota Innova"
     },
     {
       "id": "mahindra-thar",
-      "description": "Mahindra Thar red off-road vehicle ultra high resolution",
+      "description": "Mahindra Thar red off-road vehicle ultra high resolution front view",
       "imageUrl": "https://images.unsplash.com/photo-1620063251213-91b4020a59a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      "imageHint": "red offroad"
+      "imageHint": "red Thar"
     },
     {
       "id": "maruti-baleno",
       "description": "Modern Maruti Suzuki Baleno hatchback sharp focus 4K",
       "imageUrl": "https://images.unsplash.com/photo-1643903176662-3c8b59ec3470?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "modern hatchback"
+    },
+    {
+      "id": "maruti-ertiga",
+      "description": "Maruti Suzuki Ertiga 7-seater MUV white color realistic outdoor shot",
+      "imageUrl": "https://images.unsplash.com/photo-1621285853634-713b8dd6b5ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "white MUV"
     }
   ]
 }
