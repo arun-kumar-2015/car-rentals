@@ -1,15 +1,14 @@
-
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDummyKey",
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "arun-rentals.firebaseapp.com",
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "arun-rentals",
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "arun-rentals.appspot.com",
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "1234567890",
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:1234567890:web:dummy"
+  apiKey: "AIzaSyBjd8vPdItkJGCbI_4yjEGCEa0XhY0kIc0",
+  authDomain: "studio-469727693-aab99.firebaseapp.com",
+  projectId: "studio-469727693-aab99",
+  storageBucket: "studio-469727693-aab99.firebasestorage.app",
+  messagingSenderId: "301941408568",
+  appId: "1:301941408568:web:9c5a70490e63450b97f7cd"
 };
 
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
