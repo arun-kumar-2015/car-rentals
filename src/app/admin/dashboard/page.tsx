@@ -73,10 +73,11 @@ export default function AdminDashboard() {
   const router = useRouter();
   const { toast } = useToast();
 
+  // Fix: Only create the query if the user is authenticated to avoid permission errors
   const bookingsQuery = useMemoFirebase(() => {
-    if (!db) return null;
+    if (!db || !user) return null;
     return query(collection(db, "bookings"), orderBy("timestamp", "desc"));
-  }, [db]);
+  }, [db, user]);
 
   const { data: bookingsData, isLoading: isBookingsLoading } = useCollection<Booking>(bookingsQuery);
 
@@ -112,13 +113,15 @@ export default function AdminDashboard() {
     }
   };
 
-  if (isUserLoading || isBookingsLoading) {
+  if (isUserLoading || (user && isBookingsLoading)) {
     return (
       <div className="h-screen flex items-center justify-center bg-background">
         <Loader2 className="w-10 h-10 animate-spin text-primary" />
       </div>
     );
   }
+
+  if (!user) return null;
 
   const bookings = bookingsData || [];
 
