@@ -34,7 +34,7 @@ import {
 } from "@/firebase";
 import { collection, serverTimestamp } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Calendar, User, Phone, IdCard, MapPin, Clock, Timer, Check } from "lucide-react";
+import { Loader2, Calendar, User, Phone, IdCard, MapPin, Clock, Timer, Check, Plus, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Car {
@@ -92,17 +92,25 @@ export function BookingDialog({
     if (!formData.pickupDate || !formData.returnDate) return 1;
     const start = parseISO(formData.pickupDate);
     const end = parseISO(formData.returnDate);
-    // Inclusive calculation: Feb 1 to Feb 2 = 2 days
     const diff = differenceInDays(end, start);
     return diff >= 0 ? diff + 1 : 1;
   }, [formData.pickupDate, formData.returnDate]);
+
+  const handleDayChange = (delta: number) => {
+    const newDays = Math.max(1, totalDays + delta);
+    const start = parseISO(formData.pickupDate);
+    const newReturnDate = addDays(start, newDays - 1);
+    setFormData(prev => ({
+      ...prev,
+      returnDate: format(newReturnDate, "yyyy-MM-dd")
+    }));
+  };
 
   const totalAmount = useMemo(() => {
     if (!car) return 0;
     if (formData.rentalType === "daily") {
       return car.pricePerDay * totalDays;
     } else {
-      // 6 hours = 40% of daily price, 12 hours = 70% of daily price
       const factor = formData.hourlyDuration === "6" ? 0.4 : 0.7;
       return Math.round(car.pricePerDay * factor);
     }
@@ -146,7 +154,19 @@ export function BookingDialog({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setFormData(prev => {
+      const updated = { ...prev, [name]: value };
+      // If pickup date changes, ensure return date is at least the same day
+      if (name === "pickupDate") {
+        const start = parseISO(value);
+        const end = parseISO(prev.returnDate);
+        if (differenceInDays(end, start) < 0) {
+          updated.returnDate = value;
+        }
+      }
+      return updated;
+    });
   };
 
   return (
@@ -212,61 +232,107 @@ export function BookingDialog({
             </TabsList>
 
             <form onSubmit={handleBooking} className="space-y-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                    <Calendar className="w-3 h-3 text-primary" /> {formData.rentalType === "daily" ? "From Date" : "Booking Date"}
-                  </Label>
-                  <Input 
-                    type="date" 
-                    name="pickupDate"
-                    value={formData.pickupDate}
-                    onChange={handleChange}
-                    required
-                    className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
-                  />
-                </div>
-                
-                {formData.rentalType === "daily" ? (
-                  <div className="space-y-3">
-                    <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                      <Calendar className="w-3 h-3 text-primary" /> To Date
-                    </Label>
-                    <Input 
-                      type="date" 
-                      name="returnDate"
-                      value={formData.returnDate}
-                      onChange={handleChange}
-                      required
-                      min={formData.pickupDate}
-                      className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
-                    />
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                      <Timer className="w-3 h-3 text-primary" /> Duration
-                    </Label>
-                    <div className="flex gap-3">
-                      {["6", "12"].map((hrs) => (
-                        <button
-                          key={hrs}
-                          type="button"
-                          onClick={() => setFormData(p => ({ ...p, hourlyDuration: hrs as any }))}
-                          className={cn(
-                            "flex-1 h-12 rounded-lg border font-black text-xs transition-all flex items-center justify-center gap-2",
-                            formData.hourlyDuration === hrs 
-                              ? "bg-primary text-black border-primary shadow-lg shadow-primary/20" 
-                              : "bg-secondary/30 text-muted-foreground border-border hover:border-primary/50"
-                          )}
-                        >
-                          {hrs} HRS {formData.hourlyDuration === hrs && <Check className="w-3 h-3" />}
-                        </button>
-                      ))}
+              {formData.rentalType === "daily" ? (
+                <div className="space-y-6 animate-in fade-in duration-300">
+                  <div className="bg-secondary/20 p-4 rounded-2xl border border-border flex items-center justify-between">
+                    <div className="space-y-1">
+                      <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Number of Days</Label>
+                      <p className="text-xs text-muted-foreground">Adjust your trip duration</p>
+                    </div>
+                    <div className="flex items-center gap-4 bg-background p-2 rounded-xl border border-border">
+                      <Button 
+                        type="button" 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-8 w-8 rounded-lg"
+                        onClick={() => handleDayChange(-1)}
+                      >
+                        <Minus className="w-4 h-4" />
+                      </Button>
+                      <span className="font-black text-lg w-8 text-center">{totalDays}</span>
+                      <Button 
+                        type="button" 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-8 w-8 rounded-lg"
+                        onClick={() => handleDayChange(1)}
+                      >
+                        <Plus className="w-4 h-4" />
+                      </Button>
                     </div>
                   </div>
-                )}
-              </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                        <Calendar className="w-3 h-3 text-primary" /> Pickup Date
+                      </Label>
+                      <Input 
+                        type="date" 
+                        name="pickupDate"
+                        value={formData.pickupDate}
+                        onChange={handleChange}
+                        required
+                        className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                        <Calendar className="w-3 h-3 text-primary" /> Return Date
+                      </Label>
+                      <Input 
+                        type="date" 
+                        name="returnDate"
+                        value={formData.returnDate}
+                        onChange={handleChange}
+                        required
+                        min={formData.pickupDate}
+                        className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-6 animate-in fade-in duration-300">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                        <Calendar className="w-3 h-3 text-primary" /> Booking Date
+                      </Label>
+                      <Input 
+                        type="date" 
+                        name="pickupDate"
+                        value={formData.pickupDate}
+                        onChange={handleChange}
+                        required
+                        className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                        <Timer className="w-3 h-3 text-primary" /> Select Hours
+                      </Label>
+                      <div className="flex gap-3">
+                        {["6", "12"].map((hrs) => (
+                          <button
+                            key={hrs}
+                            type="button"
+                            onClick={() => setFormData(p => ({ ...p, hourlyDuration: hrs as any }))}
+                            className={cn(
+                              "flex-1 h-12 rounded-lg border font-black text-xs transition-all flex items-center justify-center gap-2",
+                              formData.hourlyDuration === hrs 
+                                ? "bg-primary text-black border-primary shadow-lg shadow-primary/20" 
+                                : "bg-secondary/30 text-muted-foreground border-border hover:border-primary/50"
+                            )}
+                          >
+                            {hrs} HRS {formData.hourlyDuration === hrs && <Check className="w-3 h-3" />}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-5 pt-2 border-t border-border/50">
                 <div className="space-y-3">
@@ -360,3 +426,4 @@ export function BookingDialog({
     </Dialog>
   );
 }
+
