@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect } from "react";
@@ -125,70 +124,70 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card sticky top-0 z-10">
+      <header className="border-b border-border bg-card sticky top-0 z-20">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-          <h1 className="text-xl font-headline font-bold uppercase tracking-tight flex items-center gap-2">
-            <div className="bg-primary p-1 rounded-md"><CarIcon className="w-5 h-5 text-black" /></div>
-            Admin <span className="text-primary">Dashboard</span>
+          <h1 className="text-lg sm:text-xl font-headline font-bold uppercase tracking-tight flex items-center gap-2">
+            <div className="bg-primary p-1 rounded-md shrink-0"><CarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-black" /></div>
+            <span className="hidden sm:inline">Admin</span> Dashboard
           </h1>
-          <Button variant="ghost" size="sm" onClick={handleLogout} className="text-muted-foreground hover:text-destructive">
-            <LogOut className="w-4 h-4 mr-2" /> Logout
+          <Button variant="ghost" size="sm" onClick={handleLogout} className="text-muted-foreground hover:text-destructive h-9">
+            <LogOut className="w-4 h-4 mr-1.5" /> <span className="hidden sm:inline">Logout</span>
           </Button>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <main className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
           <Card className="bg-card border-border">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Bookings</CardTitle>
-              <Calendar className="w-4 h-4 text-primary" />
+            <CardHeader className="flex flex-row items-center justify-between pb-1 sm:pb-2 space-y-0 px-4 pt-4">
+              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">Bookings</CardTitle>
+              <Calendar className="w-3.5 h-3.5 text-primary" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{bookings.length}</div>
+            <CardContent className="px-4 pb-4">
+              <div className="text-xl sm:text-2xl font-bold">{bookings.length}</div>
             </CardContent>
           </Card>
           <Card className="bg-card border-border">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Revenue</CardTitle>
-              <Wallet className="w-4 h-4 text-primary" />
+            <CardHeader className="flex flex-row items-center justify-between pb-1 sm:pb-2 space-y-0 px-4 pt-4">
+              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">Revenue</CardTitle>
+              <Wallet className="w-3.5 h-3.5 text-primary" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-primary">₹{bookings.reduce((sum, b) => sum + b.totalAmount, 0).toLocaleString()}</div>
+            <CardContent className="px-4 pb-4">
+              <div className="text-xl sm:text-2xl font-bold text-primary">₹{bookings.reduce((sum, b) => sum + b.totalAmount, 0).toLocaleString()}</div>
             </CardContent>
           </Card>
           <Card className="bg-card border-border">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Pending</CardTitle>
-              <Clock className="w-4 h-4 text-yellow-500" />
+            <CardHeader className="flex flex-row items-center justify-between pb-1 sm:pb-2 space-y-0 px-4 pt-4">
+              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">Pending</CardTitle>
+              <Clock className="w-3.5 h-3.5 text-yellow-500" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{bookings.filter(b => b.status === "Pending").length}</div>
+            <CardContent className="px-4 pb-4">
+              <div className="text-xl sm:text-2xl font-bold">{bookings.filter(b => b.status === "Pending").length}</div>
             </CardContent>
           </Card>
           <Card className="bg-card border-border">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Confirmed</CardTitle>
-              <CheckCircle className="w-4 h-4 text-green-500" />
+            <CardHeader className="flex flex-row items-center justify-between pb-1 sm:pb-2 space-y-0 px-4 pt-4">
+              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">Confirmed</CardTitle>
+              <CheckCircle className="w-3.5 h-3.5 text-green-500" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{bookings.filter(b => b.status === "Confirmed").length}</div>
+            <CardContent className="px-4 pb-4">
+              <div className="text-xl sm:text-2xl font-bold">{bookings.filter(b => b.status === "Confirmed").length}</div>
             </CardContent>
           </Card>
         </div>
 
         <Card className="bg-card border-border overflow-hidden">
-          <CardHeader>
-            <CardTitle>Recent Bookings</CardTitle>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-lg sm:text-xl">Recent Bookings</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto touch-pan-x">
               <Table>
                 <TableHeader>
                   <TableRow className="border-border hover:bg-transparent">
-                    <TableHead className="w-[200px]">Customer</TableHead>
+                    <TableHead className="min-w-[150px]">Customer</TableHead>
                     <TableHead>Car</TableHead>
-                    <TableHead>Duration</TableHead>
+                    <TableHead className="hidden sm:table-cell">Duration</TableHead>
                     <TableHead>Dates</TableHead>
                     <TableHead>Amount</TableHead>
                     <TableHead>Status</TableHead>
@@ -200,16 +199,16 @@ export default function AdminDashboard() {
                     <TableRow key={booking.id} className="border-border group">
                       <TableCell>
                         <div className="flex flex-col">
-                          <span className="font-bold flex items-center gap-1"><User className="w-3 h-3" /> {booking.customerName}</span>
-                          <span className="text-xs text-muted-foreground flex items-center gap-1"><Phone className="w-3 h-3" /> {booking.phone}</span>
+                          <span className="font-bold flex items-center gap-1 text-sm"><User className="w-3 h-3" /> {booking.customerName}</span>
+                          <span className="text-[10px] sm:text-xs text-muted-foreground flex items-center gap-1"><Phone className="w-3 h-3" /> {booking.phone}</span>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge variant="outline" className="font-medium flex items-center gap-1 w-fit bg-secondary/30">
-                          <CarIcon className="w-3 h-3" /> {booking.carName}
+                        <Badge variant="outline" className="font-medium flex items-center gap-1 w-fit bg-secondary/30 text-[10px] px-1.5 py-0">
+                          {booking.carName}
                         </Badge>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="hidden sm:table-cell">
                         <div className="flex items-center gap-1.5 text-xs font-semibold">
                           {booking.rentalType === "hourly" ? (
                             <Badge variant="secondary" className="bg-primary/20 text-primary border-primary/30">
@@ -223,39 +222,40 @@ export default function AdminDashboard() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className="text-xs space-y-0.5">
-                          <div className="flex items-center gap-1"><span className="text-primary">Date:</span> {booking.pickupDate}</div>
+                        <div className="text-[10px] sm:text-xs space-y-0.5">
+                          <div className="flex items-center gap-1"><span className="text-primary hidden sm:inline">Date:</span> {booking.pickupDate}</div>
                           {booking.rentalType === "daily" && booking.returnDate && (
-                            <div className="flex items-center gap-1"><span className="text-primary">Ret:</span> {booking.returnDate}</div>
+                            <div className="flex items-center gap-1"><span className="text-primary hidden sm:inline">Ret:</span> {booking.returnDate}</div>
                           )}
+                          <div className="sm:hidden text-primary font-bold">{booking.durationLabel}</div>
                         </div>
                       </TableCell>
-                      <TableCell className="font-bold">₹{booking.totalAmount}</TableCell>
+                      <TableCell className="font-bold text-sm">₹{booking.totalAmount}</TableCell>
                       <TableCell>
-                        <Badge variant="outline" className={getStatusColor(booking.status)}>
+                        <Badge variant="outline" className={`${getStatusColor(booking.status)} text-[10px] px-1.5 py-0`}>
                           {booking.status}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <Button variant="ghost" size="icon" className="h-9 w-9">
                               <MoreVertical className="w-4 h-4" />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="bg-card border-border">
                             <DropdownMenuItem onClick={() => updateStatus(booking.id, "Confirmed")}>
-                              <CheckCircle className="w-4 h-4 mr-2 text-green-500" /> Confirm Booking
+                              <CheckCircle className="w-4 h-4 mr-2 text-green-500" /> Confirm
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => updateStatus(booking.id, "Completed")}>
-                              <CarIcon className="w-4 h-4 mr-2 text-blue-500" /> Mark Completed
+                              <CarIcon className="w-4 h-4 mr-2 text-blue-500" /> Complete
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => updateStatus(booking.id, "Pending")}>
-                              <Clock className="w-4 h-4 mr-2 text-yellow-500" /> Set to Pending
+                              <Clock className="w-4 h-4 mr-2 text-yellow-500" /> Pending
                             </DropdownMenuItem>
                             <div className="h-px bg-border my-1" />
                             <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => deleteBooking(booking.id)}>
-                              <Trash2 className="w-4 h-4 mr-2" /> Delete Record
+                              <Trash2 className="w-4 h-4 mr-2" /> Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -275,6 +275,8 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
       </main>
+      {/* Mobile spacing for floating buttons if any */}
+      <div className="h-8 pb-safe" />
     </div>
   );
 }
