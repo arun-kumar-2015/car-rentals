@@ -41,61 +41,6 @@ const CARS = [
     image: PlaceHolderImages.find(img => img.id === "hyundai-creta")?.imageUrl || "https://picsum.photos/seed/1/600/400",
     frontImage: PlaceHolderImages.find(img => img.id === "hyundai-creta-front")?.imageUrl || "https://picsum.photos/seed/11/600/400",
     leftImage: PlaceHolderImages.find(img => img.id === "hyundai-creta-left")?.imageUrl || "https://picsum.photos/seed/12/600/400"
-  },
-  {
-    id: "swift-dzire",
-    name: "Swift Dzire",
-    pricePerDay: 1800,
-    fuel: "Petrol",
-    seats: 5,
-    transmission: "Manual",
-    image: PlaceHolderImages.find(img => img.id === "swift-dzire")?.imageUrl || "https://picsum.photos/seed/2/600/400",
-    frontImage: PlaceHolderImages.find(img => img.id === "swift-dzire-front")?.imageUrl || "https://picsum.photos/seed/21/600/400",
-    leftImage: PlaceHolderImages.find(img => img.id === "swift-dzire-left")?.imageUrl || "https://picsum.photos/seed/22/600/400"
-  },
-  {
-    id: "mahindra-thar",
-    name: "Mahindra Thar",
-    pricePerDay: 4500,
-    fuel: "Diesel",
-    seats: 4,
-    transmission: "Manual (4x4)",
-    image: PlaceHolderImages.find(img => img.id === "mahindra-thar")?.imageUrl || "https://picsum.photos/seed/3/600/400",
-    frontImage: PlaceHolderImages.find(img => img.id === "mahindra-thar-front")?.imageUrl || "https://picsum.photos/seed/31/600/400",
-    leftImage: PlaceHolderImages.find(img => img.id === "mahindra-thar-left")?.imageUrl || "https://picsum.photos/seed/32/600/400"
-  },
-  {
-    id: "toyota-innova",
-    name: "Toyota Innova Crysta",
-    pricePerDay: 5000,
-    fuel: "Diesel",
-    seats: 7,
-    transmission: "Automatic",
-    image: PlaceHolderImages.find(img => img.id === "toyota-innova")?.imageUrl || "https://picsum.photos/seed/4/600/400",
-    frontImage: PlaceHolderImages.find(img => img.id === "toyota-innova-front")?.imageUrl || "https://picsum.photos/seed/41/600/400",
-    leftImage: PlaceHolderImages.find(img => img.id === "toyota-innova-left")?.imageUrl || "https://picsum.photos/seed/42/600/400"
-  },
-  {
-    id: "maruti-ertiga",
-    name: "Maruti Suzuki Ertiga",
-    pricePerDay: 2800,
-    fuel: "Petrol/CNG",
-    seats: 7,
-    transmission: "Manual",
-    image: PlaceHolderImages.find(img => img.id === "maruti-ertiga")?.imageUrl || "https://picsum.photos/seed/5/600/400",
-    frontImage: PlaceHolderImages.find(img => img.id === "maruti-ertiga-front")?.imageUrl || "https://picsum.photos/seed/51/600/400",
-    leftImage: PlaceHolderImages.find(img => img.id === "maruti-ertiga-left")?.imageUrl || "https://picsum.photos/seed/52/600/400"
-  },
-  {
-    id: "maruti-baleno",
-    name: "Maruti Suzuki Baleno",
-    pricePerDay: 2200,
-    fuel: "Petrol",
-    seats: 5,
-    transmission: "Manual/AMT",
-    image: PlaceHolderImages.find(img => img.id === "maruti-baleno")?.imageUrl || "https://picsum.photos/seed/6/600/400",
-    frontImage: PlaceHolderImages.find(img => img.id === "maruti-baleno-front")?.imageUrl || "https://picsum.photos/seed/61/600/400",
-    leftImage: PlaceHolderImages.find(img => img.id === "maruti-baleno-left")?.imageUrl || "https://picsum.photos/seed/62/600/400"
   }
 ];
 
