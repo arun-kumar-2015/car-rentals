@@ -297,42 +297,41 @@ export function BookingDialog({
                 </div>
               ) : (
                 <div className="space-y-6 animate-in fade-in duration-300">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                        <Calendar className="w-3 h-3 text-primary" /> Booking Date
-                      </Label>
-                      <Input 
-                        type="date" 
-                        name="pickupDate"
-                        value={formData.pickupDate}
-                        onChange={handleChange}
-                        required
-                        className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
-                      />
+                  <div className="space-y-3">
+                    <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                      <Timer className="w-3 h-3 text-primary" /> Select Hours
+                    </Label>
+                    <div className="flex gap-3">
+                      {["6", "12"].map((hrs) => (
+                        <button
+                          key={hrs}
+                          type="button"
+                          onClick={() => setFormData(p => ({ ...p, hourlyDuration: hrs as any }))}
+                          className={cn(
+                            "flex-1 h-12 rounded-lg border font-black text-xs transition-all flex items-center justify-center gap-2",
+                            formData.hourlyDuration === hrs 
+                              ? "bg-primary text-black border-primary shadow-lg shadow-primary/20" 
+                              : "bg-secondary/30 text-muted-foreground border-border hover:border-primary/50"
+                          )}
+                        >
+                          {hrs} HRS {formData.hourlyDuration === hrs && <Check className="w-3 h-3" />}
+                        </button>
+                      ))}
                     </div>
-                    <div className="space-y-3">
-                      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                        <Timer className="w-3 h-3 text-primary" /> Select Hours
-                      </Label>
-                      <div className="flex gap-3">
-                        {["6", "12"].map((hrs) => (
-                          <button
-                            key={hrs}
-                            type="button"
-                            onClick={() => setFormData(p => ({ ...p, hourlyDuration: hrs as any }))}
-                            className={cn(
-                              "flex-1 h-12 rounded-lg border font-black text-xs transition-all flex items-center justify-center gap-2",
-                              formData.hourlyDuration === hrs 
-                                ? "bg-primary text-black border-primary shadow-lg shadow-primary/20" 
-                                : "bg-secondary/30 text-muted-foreground border-border hover:border-primary/50"
-                            )}
-                          >
-                            {hrs} HRS {formData.hourlyDuration === hrs && <Check className="w-3 h-3" />}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                      <Calendar className="w-3 h-3 text-primary" /> Booking Date
+                    </Label>
+                    <Input 
+                      type="date" 
+                      name="pickupDate"
+                      value={formData.pickupDate}
+                      onChange={handleChange}
+                      required
+                      className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                    />
                   </div>
                 </div>
               )}

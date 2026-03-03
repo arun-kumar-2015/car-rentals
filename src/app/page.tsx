@@ -21,7 +21,8 @@ import {
   Clock,
   Wallet,
   Timer,
-  Calendar
+  Calendar,
+  Eye
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -101,13 +102,9 @@ const CARS = [
 export default function HomePage() {
   const [selectedCar, setSelectedCar] = useState<typeof CARS[0] | null>(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [initialRentalType, setInitialRentalType] = useState<"daily" | "hourly">("daily");
-  const [initialHourlyDuration, setInitialHourlyDuration] = useState<"6" | "12">("6");
 
-  const openBooking = (car: typeof CARS[0], type: "daily" | "hourly" = "daily", duration: "6" | "12" = "6") => {
+  const openBooking = (car: typeof CARS[0]) => {
     setSelectedCar(car);
-    setInitialRentalType(type);
-    setInitialHourlyDuration(duration);
     setIsBookingOpen(true);
   };
 
@@ -204,7 +201,7 @@ export default function HomePage() {
               Our <span className="text-primary">Fleet</span>
             </h2>
             <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto">
-              Select your car and rental duration to get started.
+              Select your car and choose your preferred rental plan.
             </p>
           </div>
 
@@ -242,29 +239,12 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  <div className="space-y-3 mt-auto">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Choose Rental Duration</p>
-                    <div className="grid grid-cols-2 gap-3">
-                      <Button 
-                        variant="outline"
-                        className="h-12 border-border hover:border-primary hover:bg-primary/5 font-bold text-xs uppercase transition-all"
-                        onClick={() => openBooking(car, "hourly", "6")}
-                      >
-                        <Timer className="w-4 h-4 mr-2 text-primary" /> 6 Hours
-                      </Button>
-                      <Button 
-                        variant="outline"
-                        className="h-12 border-border hover:border-primary hover:bg-primary/5 font-bold text-xs uppercase transition-all"
-                        onClick={() => openBooking(car, "hourly", "12")}
-                      >
-                        <Timer className="w-4 h-4 mr-2 text-primary" /> 12 Hours
-                      </Button>
-                    </div>
+                  <div className="mt-auto">
                     <Button 
-                      className="w-full h-14 font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/10"
-                      onClick={() => openBooking(car, "daily")}
+                      className="w-full h-14 font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/10 rounded-xl"
+                      onClick={() => openBooking(car)}
                     >
-                      <Calendar className="w-4 h-4 mr-2" /> Book Full Day(s)
+                      <Eye className="w-4 h-4 mr-2" /> View Details & Book
                     </Button>
                   </div>
                 </div>
@@ -387,8 +367,6 @@ export default function HomePage() {
         car={selectedCar} 
         isOpen={isBookingOpen} 
         onClose={() => setIsBookingOpen(false)} 
-        initialRentalType={initialRentalType}
-        initialHourlyDuration={initialHourlyDuration}
       />
     </main>
   );
