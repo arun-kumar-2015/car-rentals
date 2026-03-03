@@ -9,7 +9,6 @@ import {
   DialogContent, 
   DialogHeader, 
   DialogTitle, 
-  DialogDescription,
 } from "@/components/ui/dialog";
 import { 
   Carousel, 
@@ -388,37 +387,6 @@ export function BookingDialog({
                   <div className="space-y-5 pt-4 border-t border-border">
                     <div className="space-y-3">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                        <Camera className="w-3 h-3 text-primary" /> Driving License Photo
-                      </Label>
-                      <div className="relative group/photo">
-                        {licensePhoto ? (
-                          <div className="relative aspect-video rounded-xl overflow-hidden border-2 border-primary/30 group">
-                            <Image src={licensePhoto} alt="License Preview" fill className="object-cover" />
-                            <button 
-                              type="button"
-                              onClick={() => setLicensePhoto(null)}
-                              className="absolute top-2 right-2 bg-black/60 p-1.5 rounded-full text-white hover:bg-destructive transition-colors"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ) : (
-                          <label className="flex flex-col items-center justify-center aspect-video rounded-xl border-2 border-dashed border-border bg-secondary/20 cursor-pointer hover:border-primary/50 hover:bg-secondary/30 transition-all">
-                            <Camera className="w-8 h-8 text-muted-foreground mb-2" />
-                            <span className="text-xs font-bold uppercase text-muted-foreground">Upload License Photo</span>
-                            <input 
-                              type="file" 
-                              accept="image/*" 
-                              onChange={handlePhotoUpload} 
-                              className="hidden" 
-                            />
-                          </label>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
                         <User className="w-3 h-3 text-primary" /> Your Full Name
                       </Label>
                       <Input 
@@ -457,6 +425,38 @@ export function BookingDialog({
                           required
                           className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-medium"
                         />
+                      </div>
+                    </div>
+
+                    {/* Driving License Photo moved here, above Pickup Location */}
+                    <div className="space-y-3">
+                      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                        <Camera className="w-3 h-3 text-primary" /> Driving License Photo
+                      </Label>
+                      <div className="relative group/photo">
+                        {licensePhoto ? (
+                          <div className="relative aspect-video rounded-xl overflow-hidden border-2 border-primary/30 group">
+                            <Image src={licensePhoto} alt="License Preview" fill className="object-cover" />
+                            <button 
+                              type="button"
+                              onClick={() => setLicensePhoto(null)}
+                              className="absolute top-2 right-2 bg-black/60 p-1.5 rounded-full text-white hover:bg-destructive transition-colors"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <label className="flex flex-col items-center justify-center aspect-video rounded-xl border-2 border-dashed border-border bg-secondary/20 cursor-pointer hover:border-primary/50 hover:bg-secondary/30 transition-all">
+                            <Camera className="w-8 h-8 text-muted-foreground mb-2" />
+                            <span className="text-xs font-bold uppercase text-muted-foreground">Upload License Photo</span>
+                            <input 
+                              type="file" 
+                              accept="image/*" 
+                              onChange={handlePhotoUpload} 
+                              className="hidden" 
+                            />
+                          </label>
+                        )}
                       </div>
                     </div>
 
