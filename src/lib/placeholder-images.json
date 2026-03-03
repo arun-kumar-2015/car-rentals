@@ -26,9 +26,9 @@
     },
     {
       "id": "swift-dzire",
-      "description": "Swift Dzire silver sedan",
-      "imageUrl": "https://images.unsplash.com/photo-1722088353797-ddfe6e2faf34?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzZWRhbiUyMGNhcnxlbnwwfHx8fDE3NzE0OTA5MDl8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "sedan car"
+      "description": "White Suzuki Swift hatchback",
+      "imageUrl": "https://images.unsplash.com/photo-1590362891991-f776e747a588?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "white hatchback"
     },
     {
       "id": "swift-dzire-front",
