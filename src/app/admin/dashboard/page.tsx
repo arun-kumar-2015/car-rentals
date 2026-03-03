@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { collection, query, orderBy, doc } from "firebase/firestore";
@@ -48,7 +48,8 @@ import {
   Phone, 
   Car as CarIcon, 
   Wallet,
-  Timer
+  Timer,
+  Bell
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -73,6 +74,7 @@ export default function AdminDashboard() {
   const db = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
+  const prevBookingsCount = useRef<number>(0);
 
   const bookingsQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
@@ -86,6 +88,21 @@ export default function AdminDashboard() {
       router.push("/admin/login");
     }
   }, [user, isUserLoading, router]);
+
+  // Real-time notification for new bookings
+  useEffect(() => {
+    if (bookingsData && bookingsData.length > prevBookingsCount.current) {
+      if (prevBookingsCount.current !== 0) {
+        const latest = bookingsData[0];
+        toast({
+          title: "New Booking Received!",
+          description: `${latest.customerName} just booked ${latest.carName}.`,
+          duration: 10000,
+        });
+      }
+      prevBookingsCount.current = bookingsData.length;
+    }
+  }, [bookingsData, toast]);
 
   const updateStatus = (id: string, newStatus: Booking["status"]) => {
     const docRef = doc(db, "bookings", id);
@@ -133,9 +150,14 @@ export default function AdminDashboard() {
             <div className="bg-primary p-1 rounded-md shrink-0"><CarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-black" /></div>
             <span className="hidden sm:inline">Admin</span> Dashboard
           </h1>
-          <Button variant="ghost" size="sm" onClick={handleLogout} className="text-muted-foreground hover:text-destructive h-9">
-            <LogOut className="w-4 h-4 mr-1.5" /> <span className="hidden sm:inline">Logout</span>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="hidden sm:flex items-center gap-1.5 bg-primary/10 text-primary border-primary/20">
+              <Bell className="w-3 h-3" /> Live Notifications On
+            </Badge>
+            <Button variant="ghost" size="sm" onClick={handleLogout} className="text-muted-foreground hover:text-destructive h-9">
+              <LogOut className="w-4 h-4 mr-1.5" /> <span className="hidden sm:inline">Logout</span>
+            </Button>
+          </div>
         </div>
       </header>
 
