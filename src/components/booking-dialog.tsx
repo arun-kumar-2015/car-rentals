@@ -430,7 +430,7 @@ export function BookingDialog({
                       </div>
                     </div>
 
-                    {/* License Photo directly above Pickup Location */}
+                    {/* Driving License Photo directly above Pickup Location */}
                     <div className="space-y-3">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
                         <Camera className="w-3 h-3 text-primary" /> Driving License Photo

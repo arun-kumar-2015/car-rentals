@@ -2,37 +2,37 @@
   "placeholderImages": [
     {
       "id": "hero-car",
-      "description": "Premium car fleet parked in a modern urban area",
+      "description": "Ultra-realistic 4K car photography of a premium car fleet parked in a modern urban area",
       "imageUrl": "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      "imageHint": "luxury cars parking"
+      "imageHint": "luxury cars"
     },
     {
       "id": "hyundai-creta",
-      "description": "Hyundai Creta SUV white",
+      "description": "Highly detailed white Hyundai Creta SUV in natural daylight",
       "imageUrl": "https://images.unsplash.com/photo-1650959818516-03d68079f9a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "white SUV"
     },
     {
       "id": "swift-dzire",
-      "description": "Maruti Suzuki Swift Dzire Sedan",
+      "description": "Realistic Maruti Suzuki Swift Dzire white sedan professional shot",
       "imageUrl": "https://images.unsplash.com/photo-1590362891991-f776e747a588?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "white sedan"
     },
     {
       "id": "innova-crysta",
-      "description": "Toyota Innova Crysta Luxury MUV",
+      "description": "Toyota Innova Crysta luxury MUV with realistic reflections",
       "imageUrl": "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "luxury MUV"
     },
     {
       "id": "mahindra-thar",
-      "description": "Mahindra Thar Red Off-road SUV",
+      "description": "Mahindra Thar red off-road vehicle ultra high resolution",
       "imageUrl": "https://images.unsplash.com/photo-1620063251213-91b4020a59a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      "imageHint": "offroad SUV"
+      "imageHint": "red offroad"
     },
     {
       "id": "maruti-baleno",
-      "description": "Maruti Suzuki Baleno Hatchback",
+      "description": "Modern Maruti Suzuki Baleno hatchback sharp focus 4K",
       "imageUrl": "https://images.unsplash.com/photo-1643903176662-3c8b59ec3470?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "modern hatchback"
     }
