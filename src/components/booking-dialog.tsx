@@ -3,7 +3,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
-import { format, differenceInDays, addDays } from "date-fns";
+import { format, differenceInDays, addDays, parseISO } from "date-fns";
 import { 
   Dialog, 
   DialogContent, 
@@ -89,10 +89,12 @@ export function BookingDialog({
   }, [isOpen, initialRentalType, initialHourlyDuration]);
 
   const totalDays = useMemo(() => {
-    const start = new Date(formData.pickupDate);
-    const end = new Date(formData.returnDate);
-    const days = differenceInDays(end, start);
-    return days > 0 ? days : 1;
+    if (!formData.pickupDate || !formData.returnDate) return 1;
+    const start = parseISO(formData.pickupDate);
+    const end = parseISO(formData.returnDate);
+    // Inclusive calculation: Feb 1 to Feb 2 = 2 days
+    const diff = differenceInDays(end, start);
+    return diff >= 0 ? diff + 1 : 1;
   }, [formData.pickupDate, formData.returnDate]);
 
   const totalAmount = useMemo(() => {
@@ -213,7 +215,7 @@ export function BookingDialog({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-3">
                   <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                    <Calendar className="w-3 h-3 text-primary" /> {formData.rentalType === "daily" ? "Pickup Date" : "Booking Date"}
+                    <Calendar className="w-3 h-3 text-primary" /> {formData.rentalType === "daily" ? "From Date" : "Booking Date"}
                   </Label>
                   <Input 
                     type="date" 
@@ -228,7 +230,7 @@ export function BookingDialog({
                 {formData.rentalType === "daily" ? (
                   <div className="space-y-3">
                     <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                      <Calendar className="w-3 h-3 text-primary" /> Return Date
+                      <Calendar className="w-3 h-3 text-primary" /> To Date
                     </Label>
                     <Input 
                       type="date" 
@@ -236,6 +238,7 @@ export function BookingDialog({
                       value={formData.returnDate}
                       onChange={handleChange}
                       required
+                      min={formData.pickupDate}
                       className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
                     />
                   </div>
@@ -337,6 +340,11 @@ export function BookingDialog({
                   </div>
                 </div>
                 <div className="text-right">
+                  {formData.rentalType === "daily" && totalDays > 0 && (
+                    <div className="text-[10px] text-muted-foreground font-bold mb-1">
+                      {totalDays} Day(s) x ₹{car?.pricePerDay.toLocaleString()}
+                    </div>
+                  )}
                   <div className="text-2xl font-black text-primary yellow-glow">₹{totalAmount.toLocaleString()}</div>
                   <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Final Price</div>
                 </div>
