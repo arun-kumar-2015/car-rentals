@@ -277,7 +277,6 @@ export function BookingDialog({
 
                 <form onSubmit={handleBooking} className="space-y-8">
                   <TabsContent value="daily" className="mt-0 space-y-6">
-                    {/* Duration Selection at Top */}
                     <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="space-y-1">
                         <Label className="text-xs font-black uppercase tracking-widest text-primary">Set Days</Label>
@@ -341,7 +340,6 @@ export function BookingDialog({
                   </TabsContent>
 
                   <TabsContent value="hourly" className="mt-0 space-y-6">
-                    {/* Duration Selection at Top */}
                     <div className="space-y-4">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary">
                         <Timer className="w-4 h-4" /> Choose Duration
@@ -430,7 +428,6 @@ export function BookingDialog({
                       </div>
                     </div>
 
-                    {/* Driving License Photo directly above Pickup Location */}
                     <div className="space-y-3">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
                         <Camera className="w-3 h-3 text-primary" /> Driving License Photo
