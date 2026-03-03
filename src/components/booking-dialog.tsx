@@ -18,6 +18,12 @@ import {
   CarouselNext, 
   CarouselPrevious 
 } from "@/components/ui/carousel";
+import { 
+  Tabs, 
+  TabsList, 
+  TabsTrigger, 
+  TabsContent 
+} from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,7 +35,7 @@ import {
 } from "@/firebase";
 import { collection, serverTimestamp } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Calendar, User, Phone, IdCard, MapPin, Clock } from "lucide-react";
+import { Loader2, Calendar, User, Phone, IdCard, MapPin, Clock, Timer } from "lucide-react";
 
 interface Car {
   id: string;
@@ -147,123 +153,134 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
 
         <div className="p-6 space-y-6">
           <DialogHeader>
-            <DialogTitle className="text-3xl font-headline flex items-center justify-between">
+            <DialogTitle className="text-2xl sm:text-3xl font-headline flex items-center justify-between">
               <div>Book <span className="text-primary">{car?.name}</span></div>
-              <div className="text-xl text-primary font-bold">₹{car?.pricePerDay}<span className="text-sm text-muted-foreground">/day</span></div>
+              <div className="text-lg sm:text-xl text-primary font-bold">₹{car?.pricePerDay}<span className="text-xs text-muted-foreground">/day</span></div>
             </DialogTitle>
-            <DialogDescription className="text-muted-foreground text-base">
-              Complete the form below to reserve your vehicle. Choose between daily or hourly rental plans.
+            <DialogDescription className="text-muted-foreground text-sm sm:text-base">
+              Choose your rental plan and fill in your details to reserve this vehicle.
             </DialogDescription>
           </DialogHeader>
           
-          <form onSubmit={handleBooking} className="space-y-6">
-            <div className="space-y-4">
-              <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Rental Plan</Label>
-              <RadioGroup 
-                value={formData.rentalType} 
-                onValueChange={(val) => setFormData(p => ({ ...p, rentalType: val as any }))}
-                className="flex gap-6"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="daily" id="daily" className="border-primary text-primary" />
-                  <Label htmlFor="daily" className="cursor-pointer font-semibold">Daily Rental</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="hourly" id="hourly" className="border-primary text-primary" />
-                  <Label htmlFor="hourly" className="cursor-pointer font-semibold">Hourly Rental</Label>
-                </div>
-              </RadioGroup>
-            </div>
+          <Tabs 
+            defaultValue="daily" 
+            className="w-full"
+            onValueChange={(val) => setFormData(p => ({ ...p, rentalType: val as any }))}
+          >
+            <TabsList className="grid w-full grid-cols-2 mb-6 h-12 bg-secondary/50 p-1">
+              <TabsTrigger value="daily" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-black">
+                <Calendar className="w-4 h-4 mr-2" /> Daily
+              </TabsTrigger>
+              <TabsTrigger value="hourly" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-black">
+                <Clock className="w-4 h-4 mr-2" /> Hourly
+              </TabsTrigger>
+            </TabsList>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                  <Calendar className="w-3.5 h-3.5 text-primary" /> {formData.rentalType === "daily" ? "Pickup Date" : "Booking Date"}
-                </Label>
-                <Input 
-                  type="date" 
-                  name="pickupDate"
-                  value={formData.pickupDate}
-                  onChange={handleChange}
-                  required
-                  className="bg-background border-border h-11 focus:ring-primary"
-                />
-              </div>
-              
-              {formData.rentalType === "daily" ? (
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                    <Calendar className="w-3.5 h-3.5 text-primary" /> Return Date
-                  </Label>
-                  <Input 
-                    type="date" 
-                    name="returnDate"
-                    value={formData.returnDate}
-                    onChange={handleChange}
-                    required
-                    className="bg-background border-border h-11 focus:ring-primary"
-                  />
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                    <Clock className="w-3.5 h-3.5 text-primary" /> Duration
-                  </Label>
-                  <RadioGroup 
-                    value={formData.hourlyDuration} 
-                    onValueChange={(val) => setFormData(p => ({ ...p, hourlyDuration: val as any }))}
-                    className="flex gap-4 pt-2"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="6" id="6hrs" />
-                      <Label htmlFor="6hrs" className="cursor-pointer">6 Hrs</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="12" id="12hrs" />
-                      <Label htmlFor="12hrs" className="cursor-pointer">12 Hrs</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-              )}
-            </div>
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                  <User className="w-3.5 h-3.5 text-primary" /> Full Name
-                </Label>
-                <Input 
-                  placeholder="Enter your name"
-                  name="customerName"
-                  value={formData.customerName}
-                  onChange={handleChange}
-                  required
-                  className="bg-background border-border h-11 focus:ring-primary"
-                />
-              </div>
-
+            <form onSubmit={handleBooking} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                    <Phone className="w-3.5 h-3.5 text-primary" /> Phone Number
+                    <Calendar className="w-3.5 h-3.5 text-primary" /> {formData.rentalType === "daily" ? "Pickup Date" : "Booking Date"}
                   </Label>
                   <Input 
-                    placeholder="+91 00000 00000"
-                    name="phone"
-                    value={formData.phone}
+                    type="date" 
+                    name="pickupDate"
+                    value={formData.pickupDate}
                     onChange={handleChange}
                     required
                     className="bg-background border-border h-11 focus:ring-primary"
                   />
                 </div>
+                
+                {formData.rentalType === "daily" ? (
+                  <div className="space-y-2">
+                    <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                      <Calendar className="w-3.5 h-3.5 text-primary" /> Return Date
+                    </Label>
+                    <Input 
+                      type="date" 
+                      name="returnDate"
+                      value={formData.returnDate}
+                      onChange={handleChange}
+                      required
+                      className="bg-background border-border h-11 focus:ring-primary"
+                    />
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                      <Timer className="w-3.5 h-3.5 text-primary" /> Duration
+                    </Label>
+                    <RadioGroup 
+                      value={formData.hourlyDuration} 
+                      onValueChange={(val) => setFormData(p => ({ ...p, hourlyDuration: val as any }))}
+                      className="flex gap-4 pt-1"
+                    >
+                      <div className="flex items-center space-x-2 bg-secondary/30 px-3 py-2 rounded-lg border border-border cursor-pointer">
+                        <RadioGroupItem value="6" id="6hrs" />
+                        <Label htmlFor="6hrs" className="cursor-pointer font-bold">6 Hours</Label>
+                      </div>
+                      <div className="flex items-center space-x-2 bg-secondary/30 px-3 py-2 rounded-lg border border-border cursor-pointer">
+                        <RadioGroupItem value="12" id="12hrs" />
+                        <Label htmlFor="12hrs" className="cursor-pointer font-bold">12 Hours</Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-4">
                 <div className="space-y-2">
                   <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                    <IdCard className="w-3.5 h-3.5 text-primary" /> License Number
+                    <User className="w-3.5 h-3.5 text-primary" /> Full Name
                   </Label>
                   <Input 
-                    placeholder="DL-XXXXXXXXXXXX"
-                    name="licenseNumber"
-                    value={formData.licenseNumber}
+                    placeholder="Enter your name"
+                    name="customerName"
+                    value={formData.customerName}
+                    onChange={handleChange}
+                    required
+                    className="bg-background border-border h-11 focus:ring-primary"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                      <Phone className="w-3.5 h-3.5 text-primary" /> Phone Number
+                    </Label>
+                    <Input 
+                      placeholder="+91 00000 00000"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
+                      className="bg-background border-border h-11 focus:ring-primary"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                      <IdCard className="w-3.5 h-3.5 text-primary" /> License Number
+                    </Label>
+                    <Input 
+                      placeholder="DL-XXXXXXXXXXXX"
+                      name="licenseNumber"
+                      value={formData.licenseNumber}
+                      onChange={handleChange}
+                      required
+                      className="bg-background border-border h-11 focus:ring-primary"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                    <MapPin className="w-3.5 h-3.5 text-primary" /> Pickup Location
+                  </Label>
+                  <Input 
+                    placeholder="Area/City for pickup"
+                    name="pickupLocation"
+                    value={formData.pickupLocation}
                     onChange={handleChange}
                     required
                     className="bg-background border-border h-11 focus:ring-primary"
@@ -271,43 +288,29 @@ export function BookingDialog({ car, isOpen, onClose }: BookingDialogProps) {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                  <MapPin className="w-3.5 h-3.5 text-primary" /> Pickup Location
-                </Label>
-                <Input 
-                  placeholder="Area/City for pickup"
-                  name="pickupLocation"
-                  value={formData.pickupLocation}
-                  onChange={handleChange}
-                  required
-                  className="bg-background border-border h-11 focus:ring-primary"
-                />
+              <div className="bg-secondary/40 p-5 rounded-2xl border border-border space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">Rental Plan:</span>
+                  <span className="font-bold capitalize">{formData.rentalType}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">Duration:</span>
+                  <span className="font-bold">
+                    {formData.rentalType === "daily" ? `${totalDays} Day(s)` : `${formData.hourlyDuration} Hours`}
+                  </span>
+                </div>
+                <div className="h-px bg-border my-2" />
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-bold">Total Payable:</span>
+                  <span className="text-3xl font-black text-primary yellow-glow">₹{totalAmount.toLocaleString()}</span>
+                </div>
               </div>
-            </div>
 
-            <div className="bg-secondary/40 p-5 rounded-2xl border border-border space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Selected Plan:</span>
-                <span className="font-bold capitalize">{formData.rentalType} Rental</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Booking Duration:</span>
-                <span className="font-bold">
-                  {formData.rentalType === "daily" ? `${totalDays} Day(s)` : `${formData.hourlyDuration} Hours`}
-                </span>
-              </div>
-              <div className="h-px bg-border my-2" />
-              <div className="flex justify-between items-center">
-                <span className="text-lg font-bold">Total Price:</span>
-                <span className="text-3xl font-black text-primary">₹{totalAmount.toLocaleString()}</span>
-              </div>
-            </div>
-
-            <Button type="submit" className="w-full h-14 text-xl font-headline font-black uppercase tracking-widest" disabled={loading}>
-              {loading ? <Loader2 className="w-6 h-6 animate-spin mr-2" /> : "Confirm Reservation"}
-            </Button>
-          </form>
+              <Button type="submit" className="w-full h-14 text-xl font-headline font-black uppercase tracking-widest" disabled={loading}>
+                {loading ? <Loader2 className="w-6 h-6 animate-spin mr-2" /> : "Confirm Booking"}
+              </Button>
+            </form>
+          </Tabs>
         </div>
       </DialogContent>
     </Dialog>
