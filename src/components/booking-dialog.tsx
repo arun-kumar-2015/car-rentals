@@ -187,7 +187,7 @@ export function BookingDialog({
       });
       setIsSuccess(true);
     } catch (error) {
-      // Handled by non-blocking error emitter
+      // Error handled by Firebase architecture
     } finally {
       setLoading(false);
     }
@@ -265,23 +265,23 @@ export function BookingDialog({
                     value="daily" 
                     className="font-black uppercase tracking-wider text-xs data-[state=active]:bg-primary data-[state=active]:text-black rounded-lg transition-all gap-2"
                   >
-                    <Calendar className="w-4 h-4" /> Full Day(s)
+                    <Calendar className="w-4 h-4" /> Daily Plan
                   </TabsTrigger>
                   <TabsTrigger 
                     value="hourly" 
                     className="font-black uppercase tracking-wider text-xs data-[state=active]:bg-primary data-[state=active]:text-black rounded-lg transition-all gap-2"
                   >
-                    <Clock className="w-4 h-4" /> Hourly
+                    <Clock className="w-4 h-4" /> Hourly Plan
                   </TabsTrigger>
                 </TabsList>
 
                 <form onSubmit={handleBooking} className="space-y-8">
                   <TabsContent value="daily" className="mt-0 space-y-6">
-                    {/* Duration First */}
+                    {/* Duration Selection at Top */}
                     <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="space-y-1">
-                        <Label className="text-xs font-black uppercase tracking-widest text-primary">Rental Duration</Label>
-                        <p className="text-[10px] text-muted-foreground uppercase font-bold">Use +/- to set days</p>
+                        <Label className="text-xs font-black uppercase tracking-widest text-primary">Set Days</Label>
+                        <p className="text-[10px] text-muted-foreground uppercase font-bold">Use +/- to adjust</p>
                       </div>
                       <div className="flex items-center gap-6 bg-background p-3 rounded-xl border border-border self-end sm:self-auto shadow-sm">
                         <Button 
@@ -341,10 +341,10 @@ export function BookingDialog({
                   </TabsContent>
 
                   <TabsContent value="hourly" className="mt-0 space-y-6">
-                    {/* Duration First */}
+                    {/* Duration Selection at Top */}
                     <div className="space-y-4">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary">
-                        <Timer className="w-4 h-4" /> Select Hourly Plan
+                        <Timer className="w-4 h-4" /> Choose Duration
                       </Label>
                       <div className="grid grid-cols-2 gap-4">
                         {["6", "12"].map((hrs) => (
@@ -389,10 +389,10 @@ export function BookingDialog({
                   <div className="space-y-5 pt-4 border-t border-border">
                     <div className="space-y-3">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                        <User className="w-3 h-3 text-primary" /> Your Full Name
+                        <User className="w-3 h-3 text-primary" /> Full Name
                       </Label>
                       <Input 
-                        placeholder="Enter your name"
+                        placeholder="Your name"
                         name="customerName"
                         value={formData.customerName}
                         onChange={handleChange}
@@ -404,10 +404,10 @@ export function BookingDialog({
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div className="space-y-3">
                         <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                          <Phone className="w-3 h-3 text-primary" /> Contact Number
+                          <Phone className="w-3 h-3 text-primary" /> Phone Number
                         </Label>
                         <Input 
-                          placeholder="+91 00000 00000"
+                          placeholder="+91"
                           name="phoneNumber"
                           value={formData.phoneNumber}
                           onChange={handleChange}
@@ -417,10 +417,10 @@ export function BookingDialog({
                       </div>
                       <div className="space-y-3">
                         <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                          <IdCard className="w-3 h-3 text-primary" /> Driving License Number
+                          <IdCard className="w-3 h-3 text-primary" /> License No.
                         </Label>
                         <Input 
-                          placeholder="DL-XXXXXXXXXXXX"
+                          placeholder="DL-XXXX"
                           name="licenseNumber"
                           value={formData.licenseNumber}
                           onChange={handleChange}
@@ -430,7 +430,7 @@ export function BookingDialog({
                       </div>
                     </div>
 
-                    {/* License Photo above Pickup Location */}
+                    {/* License Photo directly above Pickup Location */}
                     <div className="space-y-3">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
                         <Camera className="w-3 h-3 text-primary" /> Driving License Photo
@@ -450,7 +450,7 @@ export function BookingDialog({
                         ) : (
                           <label className="flex flex-col items-center justify-center aspect-video rounded-xl border-2 border-dashed border-border bg-secondary/20 cursor-pointer hover:border-primary/50 hover:bg-secondary/30 transition-all">
                             <Camera className="w-8 h-8 text-muted-foreground mb-2" />
-                            <span className="text-xs font-bold uppercase text-muted-foreground">Upload License Photo</span>
+                            <span className="text-[10px] font-bold uppercase text-muted-foreground">Upload Photo</span>
                             <input 
                               type="file" 
                               accept="image/*" 
@@ -467,7 +467,7 @@ export function BookingDialog({
                         <MapPin className="w-3 h-3 text-primary" /> Pickup Location
                       </Label>
                       <Input 
-                        placeholder="E.g. Sircilla Bus Stand"
+                        placeholder="E.g. Bus Stand"
                         name="pickupLocation"
                         value={formData.pickupLocation}
                         onChange={handleChange}
@@ -479,7 +479,7 @@ export function BookingDialog({
 
                   <div className="bg-primary/5 p-6 rounded-2xl border border-primary/20 flex justify-between items-center shadow-inner">
                     <div className="space-y-1">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Estimate Duration</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Plan Selected</span>
                       <div className="flex items-center gap-2">
                         <Badge variant="secondary" className="bg-primary text-black font-black text-[11px] px-3 py-1">
                           {durationLabel}
@@ -488,12 +488,12 @@ export function BookingDialog({
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-black text-primary yellow-glow">₹{totalAmount.toLocaleString()}</div>
-                      <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Total Amount</div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Estimate</div>
                     </div>
                   </div>
 
                   <Button type="submit" className="w-full h-16 text-xl font-black uppercase tracking-[0.15em] rounded-2xl shadow-xl shadow-primary/20 active:scale-[0.98] transition-all" disabled={loading}>
-                    {loading ? <Loader2 className="w-6 h-6 animate-spin mr-2" /> : "Confirm My Ride"}
+                    {loading ? <Loader2 className="w-6 h-6 animate-spin mr-2" /> : "Book Ride"}
                   </Button>
                 </form>
               </Tabs>
@@ -505,10 +505,10 @@ export function BookingDialog({
               <PartyPopper className="w-16 h-16 text-primary animate-bounce" />
             </div>
             <div className="space-y-2">
-              <h2 className="text-3xl font-black uppercase tracking-tight">Booking Successful!</h2>
+              <h2 className="text-3xl font-black uppercase tracking-tight">Booking Received!</h2>
               <p className="text-muted-foreground text-sm font-medium">
-                Your request for the <strong>{car?.name}</strong> has been received. 
-                Please notify the owner via WhatsApp to confirm instantly.
+                Your request for the <strong>{car?.name}</strong> is in progress. 
+                Notify the owner via WhatsApp to confirm instantly.
               </p>
             </div>
             
@@ -517,10 +517,10 @@ export function BookingDialog({
                 onClick={notifyViaWhatsApp} 
                 className="w-full h-16 bg-green-600 hover:bg-green-700 text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-green-600/20 flex items-center justify-center gap-3"
               >
-                <MessageSquare className="w-6 h-6" /> Notify Owner on WhatsApp
+                <MessageSquare className="w-6 h-6" /> Notify via WhatsApp
               </Button>
               <Button variant="outline" onClick={onClose} className="w-full h-12 font-bold uppercase tracking-widest rounded-xl border-border">
-                Close & Return
+                Close
               </Button>
             </div>
           </div>

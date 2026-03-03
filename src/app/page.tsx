@@ -37,10 +37,54 @@ const CARS = [
     pricePerDay: 3500,
     fuel: "Diesel",
     seats: 5,
-    transmission: "Manual/Auto",
+    transmission: "Automatic",
     image: PlaceHolderImages.find(img => img.id === "hyundai-creta")?.imageUrl || "https://picsum.photos/seed/1/600/400",
-    frontImage: PlaceHolderImages.find(img => img.id === "hyundai-creta-front")?.imageUrl || "https://picsum.photos/seed/11/600/400",
-    leftImage: PlaceHolderImages.find(img => img.id === "hyundai-creta-left")?.imageUrl || "https://picsum.photos/seed/12/600/400"
+    frontImage: "https://picsum.photos/seed/11/600/400",
+    leftImage: "https://picsum.photos/seed/12/600/400"
+  },
+  {
+    id: "swift-dzire",
+    name: "Swift Dzire",
+    pricePerDay: 2500,
+    fuel: "Petrol/CNG",
+    seats: 5,
+    transmission: "Manual",
+    image: PlaceHolderImages.find(img => img.id === "swift-dzire")?.imageUrl || "https://picsum.photos/seed/2/600/400",
+    frontImage: "https://picsum.photos/seed/21/600/400",
+    leftImage: "https://picsum.photos/seed/22/600/400"
+  },
+  {
+    id: "innova-crysta",
+    name: "Innova Crysta",
+    pricePerDay: 4500,
+    fuel: "Diesel",
+    seats: 7,
+    transmission: "Automatic",
+    image: PlaceHolderImages.find(img => img.id === "innova-crysta")?.imageUrl || "https://picsum.photos/seed/3/600/400",
+    frontImage: "https://picsum.photos/seed/31/600/400",
+    leftImage: "https://picsum.photos/seed/32/600/400"
+  },
+  {
+    id: "mahindra-thar",
+    name: "Mahindra Thar",
+    pricePerDay: 4000,
+    fuel: "Diesel/Petrol",
+    seats: 4,
+    transmission: "Manual/Auto",
+    image: PlaceHolderImages.find(img => img.id === "mahindra-thar")?.imageUrl || "https://picsum.photos/seed/4/600/400",
+    frontImage: "https://picsum.photos/seed/41/600/400",
+    leftImage: "https://picsum.photos/seed/42/600/400"
+  },
+  {
+    id: "maruti-baleno",
+    name: "Maruti Baleno",
+    pricePerDay: 2200,
+    fuel: "Petrol",
+    seats: 5,
+    transmission: "Manual",
+    image: PlaceHolderImages.find(img => img.id === "maruti-baleno")?.imageUrl || "https://picsum.photos/seed/5/600/400",
+    frontImage: "https://picsum.photos/seed/51/600/400",
+    leftImage: "https://picsum.photos/seed/52/600/400"
   }
 ];
 
@@ -64,18 +108,18 @@ export default function HomePage() {
         <div className="absolute inset-0 z-0">
           <Image 
             src={heroImage?.imageUrl || "https://picsum.photos/seed/99/1200/600"}
-            alt="Hero Car"
+            alt="Hero Fleet"
             fill
-            className="object-cover opacity-40"
+            className="object-cover opacity-50"
             priority
-            data-ai-hint="luxury car"
+            data-ai-hint="car fleet parking"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-20">
           <div className="max-w-2xl">
-            <Badge className="mb-4 bg-primary text-primary-foreground font-bold px-4 py-1 animate-in slide-in-from-left duration-500">PREMIUM CAR RENTALS</Badge>
+            <Badge className="mb-4 bg-primary text-primary-foreground font-bold px-4 py-1 animate-in slide-in-from-left duration-500 uppercase">PREMIUM CAR RENTALS</Badge>
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-headline font-black text-foreground mb-6 leading-tight uppercase animate-in slide-in-from-left duration-700 delay-100">
               Arun Car <span className="text-primary yellow-glow">Rentals</span>
             </h1>
@@ -84,7 +128,7 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 animate-in slide-in-from-left duration-700 delay-300">
               <Button size="lg" className="h-14 px-8 text-lg font-bold rounded-full w-full sm:w-auto" asChild>
-                <Link href="#cars">Book Now <ChevronRight className="ml-2 w-5 h-5" /></Link>
+                <Link href="#cars">Explore Fleet <ChevronRight className="ml-2 w-5 h-5" /></Link>
               </Button>
               <Button variant="outline" size="lg" className="h-14 px-8 text-lg font-bold rounded-full border-primary/50 hover:bg-primary/10 w-full sm:w-auto" asChild>
                 <Link href="#contact">Contact Us</Link>
@@ -146,13 +190,13 @@ export default function HomePage() {
               Our <span className="text-primary">Fleet</span>
             </h2>
             <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto">
-              Select your car and choose your preferred rental plan.
+              Select your vehicle and choose your preferred rental plan.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {CARS.map((car) => (
-              <div key={car.id} className="premium-card rounded-3xl overflow-hidden flex flex-col h-full group border-border shadow-2xl">
+              <div key={car.id} className="premium-card rounded-3xl overflow-hidden flex flex-col h-full group border-border shadow-2xl bg-card">
                 <div className="relative h-56 sm:h-64 overflow-hidden">
                   <Image 
                     src={car.image}
@@ -166,21 +210,24 @@ export default function HomePage() {
                   </div>
                 </div>
                 
-                <div className="p-8 flex-grow flex flex-col">
+                <div className="p-6 sm:p-8 flex-grow flex flex-col">
                   <div className="flex justify-between items-start mb-6">
-                    <h3 className="text-2xl font-black uppercase tracking-tight">{car.name}</h3>
+                    <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight">{car.name}</h3>
                     <div className="flex items-center gap-1 text-primary">
                       <Zap className="w-4 h-4 fill-primary" />
                       <span className="text-[10px] font-black uppercase tracking-widest">Premium</span>
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-y-4 mb-8 text-sm text-muted-foreground">
+                  <div className="grid grid-cols-2 gap-y-4 mb-8 text-xs sm:text-sm text-muted-foreground">
                     <div className="flex items-center gap-2">
                       <Fuel className="w-4 h-4 text-primary" /> {car.fuel}
                     </div>
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4 text-primary" /> {car.seats} Seats
+                    </div>
+                    <div className="flex items-center gap-2 col-span-2">
+                      <Car className="w-4 h-4 text-primary" /> {car.transmission}
                     </div>
                   </div>
 
@@ -189,7 +236,7 @@ export default function HomePage() {
                       className="w-full h-14 font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/10 rounded-xl"
                       onClick={() => openBooking(car)}
                     >
-                      <Eye className="w-4 h-4 mr-2" /> View Details & Book
+                      <Eye className="w-4 h-4 mr-2" /> View & Book
                     </Button>
                   </div>
                 </div>
@@ -243,7 +290,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="mt-8 sm:mt-10 aspect-video sm:h-80 w-full rounded-2xl overflow-hidden border border-border bg-background relative shadow-2xl">
+              <div className="mt-8 sm:mt-10 aspect-video w-full rounded-2xl overflow-hidden border border-border bg-background relative shadow-2xl">
                 <iframe 
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d473.7441589139265!2d78.8241477!3d18.390463!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcc9568770807b3%3A0x863339031c034604!2sNew%20Bus%20Stand%20Sircilla!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin&z=19" 
                   width="100%" 

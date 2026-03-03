@@ -2,27 +2,39 @@
   "placeholderImages": [
     {
       "id": "hero-car",
-      "description": "Luxury black sports car on a dark background",
-      "imageUrl": "https://images.unsplash.com/photo-1618418721668-0d1f72aa4bab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxsdXh1cnklMjBjYXJ8ZW58MHx8fHwxNzcxNDU5MDEzfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "luxury car"
+      "description": "Premium car fleet parked in a modern urban area",
+      "imageUrl": "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "luxury cars parking"
     },
     {
       "id": "hyundai-creta",
-      "description": "Hyundai Creta white SUV",
-      "imageUrl": "https://images.unsplash.com/photo-1650959818516-03d68079f9a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxTVVYlMjBjYXJ8ZW58MHx8fHwxNzcxNTczNDA1fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "SUV car"
+      "description": "Hyundai Creta SUV white",
+      "imageUrl": "https://images.unsplash.com/photo-1650959818516-03d68079f9a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "white SUV"
     },
     {
-      "id": "hyundai-creta-front",
-      "description": "Hyundai Creta Front View",
-      "imageUrl": "https://images.unsplash.com/photo-1669273347077-d652610d7a6e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      "imageHint": "car front"
+      "id": "swift-dzire",
+      "description": "Maruti Suzuki Swift Dzire Sedan",
+      "imageUrl": "https://images.unsplash.com/photo-1590362891991-f776e747a588?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "white sedan"
     },
     {
-      "id": "hyundai-creta-left",
-      "description": "Hyundai Creta Left View",
-      "imageUrl": "https://images.unsplash.com/photo-1669273347318-7b9c97b2bc23?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      "imageHint": "car side"
+      "id": "innova-crysta",
+      "description": "Toyota Innova Crysta Luxury MUV",
+      "imageUrl": "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "luxury MUV"
+    },
+    {
+      "id": "mahindra-thar",
+      "description": "Mahindra Thar Red Off-road SUV",
+      "imageUrl": "https://images.unsplash.com/photo-1620063251213-91b4020a59a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "offroad SUV"
+    },
+    {
+      "id": "maruti-baleno",
+      "description": "Maruti Suzuki Baleno Hatchback",
+      "imageUrl": "https://images.unsplash.com/photo-1643903176662-3c8b59ec3470?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "modern hatchback"
     }
   ]
 }
