@@ -10,27 +10,27 @@ A premium car rental application built with Next.js, Tailwind CSS, and Firebase.
 
 ## How to Push to GitHub
 
-To save your code and version control it on GitHub, follow these steps:
+To save your code and version control it on GitHub, run these commands in your terminal:
 
-1. **Create a new repository on GitHub:**
-   - Log in to your [GitHub account](https://github.com/).
-   - Click the **+** icon in the top right and select **New repository**.
-   - Name it `arun-car-rentals` and click **Create repository**.
-   - Copy the repository URL (it looks like `https://github.com/your-username/arun-car-rentals.git`).
+```bash
+# Initialize git repository
+git init
 
-2. **Run these commands in your terminal:**
-   Open the terminal in your development environment and run:
-   ```bash
-   # Add your GitHub repository as the remote destination
-   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+# Add all files
+git add .
 
-   # Rename the default branch to main
-   git branch -M main
+# Create first commit
+git commit -m "first commit"
 
-   # Push your code to GitHub
-   git push -u origin main
-   ```
-   *(Replace the URL with the one you copied from GitHub)*
+# Rename the default branch to main
+git branch -M main
+
+# Add your GitHub repository as the remote destination
+git remote add origin https://github.com/arun-kumar-2015/Arun-car-rental-s-.git
+
+# Push your code to GitHub
+git push -u origin main
+```
 
 ## Deployment
 This project is pre-configured for **Firebase App Hosting**. 
