@@ -234,30 +234,33 @@ export function BookingDialog({
             <form onSubmit={handleBooking} className="space-y-8">
               {formData.rentalType === "daily" ? (
                 <div className="space-y-6 animate-in fade-in duration-300">
-                  <div className="bg-secondary/20 p-4 rounded-2xl border border-border flex items-center justify-between">
+                  <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="space-y-1">
-                      <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Number of Days</Label>
-                      <p className="text-xs text-muted-foreground">Adjust your trip duration</p>
+                      <Label className="text-xs font-black uppercase tracking-widest text-primary">Number of Days</Label>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-tight">Click + to add more days</p>
                     </div>
-                    <div className="flex items-center gap-4 bg-background p-2 rounded-xl border border-border">
+                    <div className="flex items-center gap-6 bg-background p-3 rounded-xl border border-border self-end sm:self-auto">
                       <Button 
                         type="button" 
-                        variant="ghost" 
+                        variant="outline" 
                         size="icon" 
-                        className="h-8 w-8 rounded-lg"
+                        className="h-10 w-10 rounded-lg border-primary/30 hover:bg-primary/10 transition-colors"
                         onClick={() => handleDayChange(-1)}
                       >
-                        <Minus className="w-4 h-4" />
+                        <Minus className="w-5 h-5 text-primary" />
                       </Button>
-                      <span className="font-black text-lg w-8 text-center">{totalDays}</span>
+                      <div className="flex flex-col items-center min-w-[3rem]">
+                        <span className="font-black text-2xl leading-none">{totalDays}</span>
+                        <span className="text-[9px] font-black uppercase text-muted-foreground">Days</span>
+                      </div>
                       <Button 
                         type="button" 
-                        variant="ghost" 
+                        variant="outline" 
                         size="icon" 
-                        className="h-8 w-8 rounded-lg"
+                        className="h-10 w-10 rounded-lg border-primary/30 hover:bg-primary/10 transition-colors"
                         onClick={() => handleDayChange(1)}
                       >
-                        <Plus className="w-4 h-4" />
+                        <Plus className="w-5 h-5 text-primary" />
                       </Button>
                     </div>
                   </div>
@@ -265,7 +268,7 @@ export function BookingDialog({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-3">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                        <Calendar className="w-3 h-3 text-primary" /> Pickup Date
+                        <Calendar className="w-3 h-3 text-primary" /> Start Date
                       </Label>
                       <Input 
                         type="date" 
@@ -278,7 +281,7 @@ export function BookingDialog({
                     </div>
                     <div className="space-y-3">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                        <Calendar className="w-3 h-3 text-primary" /> Return Date
+                        <Calendar className="w-3 h-3 text-primary" /> End Date
                       </Label>
                       <Input 
                         type="date" 
@@ -426,4 +429,3 @@ export function BookingDialog({
     </Dialog>
   );
 }
-
