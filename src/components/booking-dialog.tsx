@@ -195,7 +195,7 @@ export function BookingDialog({
 
   const notifyViaWhatsApp = () => {
     const ownerNumber = "919876543210";
-    const message = `*NEW CAR BOOKING*%0A------------------%0A*Car:* ${car?.name}%0A*Customer:* ${formData.customerName}%0A*Phone:* ${formData.phoneNumber}%0A*Plan:* ${durationLabel}%0A*Pickup:* ${formData.pickupDate}%0A*Amount:* ₹${totalAmount}%0A*Location:* ${formData.pickupLocation}%0A*License Photo:* Attached in portal%0A------------------%0APlease confirm the booking.`;
+    const message = `*NEW CAR BOOKING*%0A------------------%0A*Car:* ${car?.name}%0A*Customer:* ${formData.customerName}%0A*Phone:* ${formData.phoneNumber}%0A*Plan:* ${durationLabel}%0A*Pickup:* ${formData.pickupDate}%0A*Amount:* ₹${totalAmount}%0A*Location:* ${formData.pickupLocation}%0A------------------%0APlease confirm the booking.`;
     window.open(`https://wa.me/${ownerNumber}?text=${message}`, "_blank");
   };
 
@@ -229,7 +229,7 @@ export function BookingDialog({
                         alt={`${car?.name} ${img.label}`} 
                         fill 
                         className="object-cover"
-                        unoptimized={img.url.includes('picsum.photos')}
+                        unoptimized={img.url.includes('unsplash.com')}
                       />
                       <div className="absolute bottom-4 left-4">
                         <Badge variant="secondary" className="bg-black/60 text-white border-none font-bold uppercase tracking-widest text-[10px]">{img.label}</Badge>
@@ -277,37 +277,6 @@ export function BookingDialog({
 
                 <form onSubmit={handleBooking} className="space-y-8">
                   <TabsContent value="daily" className="mt-0 space-y-6">
-                    <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div className="space-y-1">
-                        <Label className="text-xs font-black uppercase tracking-widest text-primary">How many Days?</Label>
-                        <p className="text-[10px] text-muted-foreground uppercase font-bold">Use +/- to set duration</p>
-                      </div>
-                      <div className="flex items-center gap-6 bg-background p-3 rounded-xl border border-border self-end sm:self-auto shadow-sm">
-                        <Button 
-                          type="button" 
-                          variant="outline" 
-                          size="icon" 
-                          className="h-10 w-10 rounded-lg border-primary/30 hover:bg-primary/10 transition-colors"
-                          onClick={() => handleDayChange(-1)}
-                        >
-                          <Minus className="w-5 h-5 text-primary" />
-                        </Button>
-                        <div className="flex flex-col items-center min-w-[3rem]">
-                          <span className="font-black text-2xl leading-none">{totalDays}</span>
-                          <span className="text-[9px] font-black uppercase text-muted-foreground">Days</span>
-                        </div>
-                        <Button 
-                          type="button" 
-                          variant="outline" 
-                          size="icon" 
-                          className="h-10 w-10 rounded-lg border-primary/30 hover:bg-primary/10 transition-colors"
-                          onClick={() => handleDayChange(1)}
-                        >
-                          <Plus className="w-5 h-5 text-primary" />
-                        </Button>
-                      </div>
-                    </div>
-
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div className="space-y-3">
                         <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
@@ -337,12 +306,57 @@ export function BookingDialog({
                         />
                       </div>
                     </div>
+
+                    <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="space-y-1">
+                        <Label className="text-xs font-black uppercase tracking-widest text-primary">Rental Duration</Label>
+                        <p className="text-[10px] text-muted-foreground uppercase font-bold">Use +/- to set days</p>
+                      </div>
+                      <div className="flex items-center gap-6 bg-background p-3 rounded-xl border border-border self-end sm:self-auto shadow-sm">
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="icon" 
+                          className="h-10 w-10 rounded-lg border-primary/30 hover:bg-primary/10 transition-colors"
+                          onClick={() => handleDayChange(-1)}
+                        >
+                          <Minus className="w-5 h-5 text-primary" />
+                        </Button>
+                        <div className="flex flex-col items-center min-w-[3rem]">
+                          <span className="font-black text-2xl leading-none">{totalDays}</span>
+                          <span className="text-[9px] font-black uppercase text-muted-foreground">Days</span>
+                        </div>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="icon" 
+                          className="h-10 w-10 rounded-lg border-primary/30 hover:bg-primary/10 transition-colors"
+                          onClick={() => handleDayChange(1)}
+                        >
+                          <Plus className="w-5 h-5 text-primary" />
+                        </Button>
+                      </div>
+                    </div>
                   </TabsContent>
 
                   <TabsContent value="hourly" className="mt-0 space-y-6">
+                    <div className="space-y-3">
+                      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                        <Calendar className="w-3 h-3 text-primary" /> Pickup Date
+                      </Label>
+                      <Input 
+                        type="date" 
+                        name="pickupDate"
+                        value={formData.pickupDate}
+                        onChange={handleChange}
+                        required
+                        className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                      />
+                    </div>
+
                     <div className="space-y-4">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary">
-                        <Timer className="w-4 h-4" /> Select Plan (6 or 12 Hours)
+                        <Timer className="w-4 h-4" /> Select Hourly Plan
                       </Label>
                       <div className="grid grid-cols-2 gap-4">
                         {["6", "12"].map((hrs) => (
@@ -367,20 +381,6 @@ export function BookingDialog({
                           </button>
                         ))}
                       </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                        <Calendar className="w-3 h-3 text-primary" /> Pickup Date
-                      </Label>
-                      <Input 
-                        type="date" 
-                        name="pickupDate"
-                        value={formData.pickupDate}
-                        onChange={handleChange}
-                        required
-                        className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
-                      />
                     </div>
                   </TabsContent>
 
@@ -428,7 +428,6 @@ export function BookingDialog({
                       </div>
                     </div>
 
-                    {/* Driving License Photo moved here, above Pickup Location */}
                     <div className="space-y-3">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
                         <Camera className="w-3 h-3 text-primary" /> Driving License Photo
@@ -477,7 +476,7 @@ export function BookingDialog({
 
                   <div className="bg-primary/5 p-6 rounded-2xl border border-primary/20 flex justify-between items-center shadow-inner">
                     <div className="space-y-1">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Booking Plan</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Estimate Duration</span>
                       <div className="flex items-center gap-2">
                         <Badge variant="secondary" className="bg-primary text-black font-black text-[11px] px-3 py-1">
                           {durationLabel}
@@ -486,7 +485,7 @@ export function BookingDialog({
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-black text-primary yellow-glow">₹{totalAmount.toLocaleString()}</div>
-                      <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Total Estimate</div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Total Amount</div>
                     </div>
                   </div>
 
