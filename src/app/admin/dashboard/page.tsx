@@ -1,8 +1,9 @@
 
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { signOut } from "firebase/auth";
 import { collection, query, orderBy, doc } from "firebase/firestore";
 import { 
@@ -37,6 +38,13 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger 
+} from "@/components/ui/dialog";
+import { 
   Loader2, 
   MoreVertical, 
   LogOut, 
@@ -49,15 +57,18 @@ import {
   Car as CarIcon, 
   Wallet,
   Timer,
-  Bell
+  Bell,
+  Camera,
+  Download
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Booking {
   id: string;
   customerName: string;
-  phone: string;
+  phoneNumber: string;
   licenseNumber: string;
+  licensePhotoUrl?: string;
   carName: string;
   pickupDate: string;
   returnDate?: string;
@@ -75,6 +86,7 @@ export default function AdminDashboard() {
   const router = useRouter();
   const { toast } = useToast();
   const prevBookingsCount = useRef<number>(0);
+  const [selectedLicense, setSelectedLicense] = useState<string | null>(null);
 
   const bookingsQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
@@ -89,7 +101,6 @@ export default function AdminDashboard() {
     }
   }, [user, isUserLoading, router]);
 
-  // Real-time notification for new bookings
   useEffect(() => {
     if (bookingsData && bookingsData.length > prevBookingsCount.current) {
       if (prevBookingsCount.current !== 0) {
@@ -214,7 +225,7 @@ export default function AdminDashboard() {
                     <TableHead>Car</TableHead>
                     <TableHead className="hidden sm:table-cell">Duration</TableHead>
                     <TableHead>Dates</TableHead>
-                    <TableHead>Amount</TableHead>
+                    <TableHead>License</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
@@ -225,7 +236,7 @@ export default function AdminDashboard() {
                       <TableCell>
                         <div className="flex flex-col">
                           <span className="font-bold flex items-center gap-1 text-sm"><User className="w-3 h-3" /> {booking.customerName}</span>
-                          <span className="text-[10px] sm:text-xs text-muted-foreground flex items-center gap-1"><Phone className="w-3 h-3" /> {booking.phone}</span>
+                          <span className="text-[10px] sm:text-xs text-muted-foreground flex items-center gap-1"><Phone className="w-3 h-3" /> {booking.phoneNumber}</span>
                         </div>
                       </TableCell>
                       <TableCell>
@@ -249,13 +260,42 @@ export default function AdminDashboard() {
                       <TableCell>
                         <div className="text-[10px] sm:text-xs space-y-0.5">
                           <div className="flex items-center gap-1"><span className="text-primary hidden sm:inline">Date:</span> {booking.pickupDate}</div>
-                          {booking.rentalType === "daily" && booking.returnDate && (
-                            <div className="flex items-center gap-1"><span className="text-primary hidden sm:inline">Ret:</span> {booking.returnDate}</div>
-                          )}
-                          <div className="sm:hidden text-primary font-bold">{booking.durationLabel}</div>
                         </div>
                       </TableCell>
-                      <TableCell className="font-bold text-sm">₹{booking.totalAmount}</TableCell>
+                      <TableCell>
+                        <div className="flex flex-col gap-1.5">
+                          <span className="text-[10px] font-medium text-muted-foreground">{booking.licenseNumber}</span>
+                          {booking.licensePhotoUrl && (
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button variant="outline" size="sm" className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider gap-1.5">
+                                  <Camera className="w-3 h-3" /> View Photo
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="sm:max-w-[600px] bg-card border-border">
+                                <DialogHeader>
+                                  <DialogTitle className="uppercase font-black text-lg">{booking.customerName}'s License</DialogTitle>
+                                </DialogHeader>
+                                <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-border mt-4">
+                                  <Image 
+                                    src={booking.licensePhotoUrl} 
+                                    alt="Driving License" 
+                                    fill 
+                                    className="object-contain" 
+                                  />
+                                </div>
+                                <div className="flex justify-end mt-4">
+                                  <Button asChild variant="secondary" size="sm">
+                                    <a href={booking.licensePhotoUrl} download={`license_${booking.customerName}.png`} className="flex items-center gap-2">
+                                      <Download className="w-4 h-4" /> Download Photo
+                                    </a>
+                                  </Button>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+                          )}
+                        </div>
+                      </TableCell>
                       <TableCell>
                         <Badge variant="outline" className={`${getStatusColor(booking.status)} text-[10px] px-1.5 py-0`}>
                           {booking.status}
@@ -287,20 +327,12 @@ export default function AdminDashboard() {
                       </TableCell>
                     </TableRow>
                   ))}
-                  {bookings.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={7} className="h-48 text-center text-muted-foreground">
-                        No bookings found.
-                      </TableCell>
-                    </TableRow>
-                  )}
                 </TableBody>
               </Table>
             </div>
           </CardContent>
         </Card>
       </main>
-      <div className="h-8 pb-safe" />
     </div>
   );
 }

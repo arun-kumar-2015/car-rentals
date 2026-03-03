@@ -34,7 +34,23 @@ import {
 } from "@/firebase";
 import { collection, serverTimestamp } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Calendar, User, Phone, IdCard, MapPin, Clock, Timer, Check, Plus, Minus, MessageSquare, PartyPopper } from "lucide-react";
+import { 
+  Loader2, 
+  Calendar, 
+  User, 
+  Phone, 
+  IdCard, 
+  MapPin, 
+  Clock, 
+  Timer, 
+  Check, 
+  Plus, 
+  Minus, 
+  MessageSquare, 
+  PartyPopper,
+  Camera,
+  X
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Car {
@@ -63,6 +79,7 @@ export function BookingDialog({
   const db = useFirestore();
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [licensePhoto, setLicensePhoto] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     customerName: "",
     phoneNumber: "",
@@ -77,6 +94,7 @@ export function BookingDialog({
   useEffect(() => {
     if (isOpen) {
       setIsSuccess(false);
+      setLicensePhoto(null);
       setFormData(prev => ({
         ...prev,
         rentalType: initialRentalType,
@@ -127,9 +145,29 @@ export function BookingDialog({
     ];
   }, [car]);
 
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLicensePhoto(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!car || !db) return;
+
+    if (!licensePhoto) {
+      toast({
+        variant: "destructive",
+        title: "Photo Required",
+        description: "Please upload a photo of your driving license.",
+      });
+      return;
+    }
 
     setLoading(true);
     try {
@@ -141,6 +179,7 @@ export function BookingDialog({
         status: "Pending",
         timestamp: serverTimestamp(),
         durationLabel,
+        licensePhotoUrl: licensePhoto,
       });
       
       toast({
@@ -156,8 +195,8 @@ export function BookingDialog({
   };
 
   const notifyViaWhatsApp = () => {
-    const ownerNumber = "919876543210"; // Owner's WhatsApp Number
-    const message = `*NEW CAR BOOKING*%0A------------------%0A*Car:* ${car?.name}%0A*Customer:* ${formData.customerName}%0A*Phone:* ${formData.phoneNumber}%0A*Plan:* ${durationLabel}%0A*Pickup:* ${formData.pickupDate}%0A*Amount:* ₹${totalAmount}%0A*Location:* ${formData.pickupLocation}%0A------------------%0APlease confirm the booking.`;
+    const ownerNumber = "919876543210";
+    const message = `*NEW CAR BOOKING*%0A------------------%0A*Car:* ${car?.name}%0A*Customer:* ${formData.customerName}%0A*Phone:* ${formData.phoneNumber}%0A*Plan:* ${durationLabel}%0A*Pickup:* ${formData.pickupDate}%0A*Amount:* ₹${totalAmount}%0A*Location:* ${formData.pickupLocation}%0A*License Photo:* Attached in portal%0A------------------%0APlease confirm the booking.`;
     window.open(`https://wa.me/${ownerNumber}?text=${message}`, "_blank");
   };
 
@@ -215,9 +254,6 @@ export function BookingDialog({
                     <div className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">Est. Total</div>
                   </div>
                 </div>
-                <DialogDescription className="text-muted-foreground text-sm font-medium">
-                  Choose your duration first, then select the date.
-                </DialogDescription>
               </DialogHeader>
               
               <Tabs 
@@ -242,7 +278,6 @@ export function BookingDialog({
 
                 <form onSubmit={handleBooking} className="space-y-8">
                   <TabsContent value="daily" className="mt-0 space-y-6">
-                    {/* Duration selection ABOVE Dates */}
                     <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="space-y-1">
                         <Label className="text-xs font-black uppercase tracking-widest text-primary">How many Days?</Label>
@@ -306,7 +341,6 @@ export function BookingDialog({
                   </TabsContent>
 
                   <TabsContent value="hourly" className="mt-0 space-y-6">
-                    {/* Duration selection ABOVE Date */}
                     <div className="space-y-4">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary">
                         <Timer className="w-4 h-4" /> Select Plan (6 or 12 Hours)
@@ -351,8 +385,38 @@ export function BookingDialog({
                     </div>
                   </TabsContent>
 
-                  {/* Customer Information */}
                   <div className="space-y-5 pt-4 border-t border-border">
+                    <div className="space-y-3">
+                      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                        <Camera className="w-3 h-3 text-primary" /> Driving License Photo
+                      </Label>
+                      <div className="relative group/photo">
+                        {licensePhoto ? (
+                          <div className="relative aspect-video rounded-xl overflow-hidden border-2 border-primary/30 group">
+                            <Image src={licensePhoto} alt="License Preview" fill className="object-cover" />
+                            <button 
+                              type="button"
+                              onClick={() => setLicensePhoto(null)}
+                              className="absolute top-2 right-2 bg-black/60 p-1.5 rounded-full text-white hover:bg-destructive transition-colors"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <label className="flex flex-col items-center justify-center aspect-video rounded-xl border-2 border-dashed border-border bg-secondary/20 cursor-pointer hover:border-primary/50 hover:bg-secondary/30 transition-all">
+                            <Camera className="w-8 h-8 text-muted-foreground mb-2" />
+                            <span className="text-xs font-bold uppercase text-muted-foreground">Upload License Photo</span>
+                            <input 
+                              type="file" 
+                              accept="image/*" 
+                              onChange={handlePhotoUpload} 
+                              className="hidden" 
+                            />
+                          </label>
+                        )}
+                      </div>
+                    </div>
+
                     <div className="space-y-3">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
                         <User className="w-3 h-3 text-primary" /> Your Full Name
@@ -383,7 +447,7 @@ export function BookingDialog({
                       </div>
                       <div className="space-y-3">
                         <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                          <IdCard className="w-3 h-3 text-primary" /> Driving License
+                          <IdCard className="w-3 h-3 text-primary" /> Driving License Number
                         </Label>
                         <Input 
                           placeholder="DL-XXXXXXXXXXXX"
@@ -411,7 +475,6 @@ export function BookingDialog({
                     </div>
                   </div>
 
-                  {/* Summary Box */}
                   <div className="bg-primary/5 p-6 rounded-2xl border border-primary/20 flex justify-between items-center shadow-inner">
                     <div className="space-y-1">
                       <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Booking Plan</span>
@@ -458,10 +521,6 @@ export function BookingDialog({
                 Close & Return
               </Button>
             </div>
-            
-            <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">
-              Arun Car Rentals • Sircilla
-            </p>
           </div>
         )}
       </DialogContent>

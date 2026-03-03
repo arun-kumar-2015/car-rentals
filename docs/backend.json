@@ -81,6 +81,11 @@
           "type": "string",
           "description": "The driving license number of the customer."
         },
+        "licensePhotoUrl": {
+          "type": "string",
+          "description": "Base64 encoded string or URL of the customer's driving license photo.",
+          "format": "uri"
+        },
         "carId": {
           "type": "string",
           "description": "Reference to the Car entity that is being booked."
