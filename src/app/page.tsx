@@ -214,6 +214,7 @@ export default function HomePage() {
                     alt={car.name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    unoptimized={car.image.startsWith('data:')}
                     data-ai-hint="car model"
                   />
                   <div className="absolute top-4 left-4">

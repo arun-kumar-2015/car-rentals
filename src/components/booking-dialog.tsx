@@ -229,7 +229,7 @@ export function BookingDialog({
                         alt={`${car?.name} ${img.label}`} 
                         fill 
                         className="object-cover"
-                        unoptimized={img.url.includes('unsplash.com')}
+                        unoptimized={img.url.startsWith('data:')}
                       />
                       <div className="absolute bottom-4 left-4">
                         <Badge variant="secondary" className="bg-black/60 text-white border-none font-bold uppercase tracking-widest text-[10px]">{img.label}</Badge>
