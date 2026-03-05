@@ -272,7 +272,7 @@ export default function HomePage() {
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
                   <div className="bg-primary/20 p-3 sm:p-4 rounded-full">
-                    <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                    <Phone className="w-5 h-5 sm:w-6 h-6 text-primary" />
                   </div>
                   <div>
                     <h4 className="font-bold text-base sm:text-lg">Call Us</h4>
@@ -281,7 +281,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="bg-primary/20 p-3 sm:p-4 rounded-full">
-                    <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                    <MessageCircle className="w-5 h-5 sm:w-6 h-6 text-primary" />
                   </div>
                   <div>
                     <h4 className="font-bold text-base sm:text-lg">WhatsApp</h4>
@@ -294,7 +294,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="bg-primary/20 p-3 sm:p-4 rounded-full">
-                    <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                    <MapPin className="w-5 h-5 sm:w-6 h-6 text-primary" />
                   </div>
                   <div>
                     <h4 className="font-bold text-base sm:text-lg">Our Office</h4>
