@@ -345,7 +345,7 @@ export function BookingDialog({
                   <TabsContent value="hourly" className="mt-0 space-y-6">
                     <div className="space-y-4">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary">
-                        <Timer className="w-4 h-4" /> Choose Duration (Hours Based Section)
+                        <Timer className="w-4 h-4" /> Choose Duration
                       </Label>
                       <div className="grid grid-cols-2 gap-4">
                         {["6", "12"].map((hrs) => (
@@ -370,7 +370,6 @@ export function BookingDialog({
                           </button>
                         ))}
                       </div>
-                      <p className="text-[10px] text-muted-foreground uppercase font-bold text-center">Plan starts from the selected pickup time</p>
                     </div>
 
                     <div className="space-y-3">
