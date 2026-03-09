@@ -87,6 +87,7 @@ export function BookingDialog({
     rentalType: initialRentalType,
     hourlyDuration: "6" as "6" | "12",
     pickupDate: format(new Date(), "yyyy-MM-dd"),
+    pickupTime: "10:00",
     returnDate: format(addDays(new Date(), 1), "yyyy-MM-dd"),
   });
 
@@ -98,6 +99,7 @@ export function BookingDialog({
         ...prev,
         rentalType: initialRentalType,
         pickupDate: format(new Date(), "yyyy-MM-dd"),
+        pickupTime: "10:00",
         returnDate: format(addDays(new Date(), 1), "yyyy-MM-dd"),
       }));
     }
@@ -195,7 +197,7 @@ export function BookingDialog({
 
   const notifyViaWhatsApp = () => {
     const ownerNumber = "919876543210";
-    const message = `*NEW CAR BOOKING*%0A------------------%0A*Car:* ${car?.name}%0A*Customer:* ${formData.customerName}%0A*Phone:* ${formData.phoneNumber}%0A*Plan:* ${durationLabel}%0A*Pickup:* ${formData.pickupDate}%0A*Amount:* ₹${totalAmount}%0A*Location:* ${formData.pickupLocation}%0A------------------%0APlease confirm the booking.`;
+    const message = `*NEW CAR BOOKING*%0A------------------%0A*Car:* ${car?.name}%0A*Customer:* ${formData.customerName}%0A*Phone:* ${formData.phoneNumber}%0A*Plan:* ${durationLabel}%0A*Pickup:* ${formData.pickupDate} at ${formData.pickupTime}%0A*Amount:* ₹${totalAmount}%0A*Location:* ${formData.pickupLocation}%0A------------------%0APlease confirm the booking.`;
     window.open(`https://wa.me/${ownerNumber}?text=${message}`, "_blank");
   };
 
@@ -386,18 +388,33 @@ export function BookingDialog({
                   </TabsContent>
 
                   <div className="space-y-5 pt-4 border-t border-border">
-                    <div className="space-y-3">
-                      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
-                        <User className="w-3 h-3 text-primary" /> Full Name
-                      </Label>
-                      <Input 
-                        placeholder="Your name"
-                        name="customerName"
-                        value={formData.customerName}
-                        onChange={handleChange}
-                        required
-                        className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-medium"
-                      />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="space-y-3">
+                        <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                          <User className="w-3 h-3 text-primary" /> Full Name
+                        </Label>
+                        <Input 
+                          placeholder="Your name"
+                          name="customerName"
+                          value={formData.customerName}
+                          onChange={handleChange}
+                          required
+                          className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
+                          <Clock className="w-3 h-3 text-primary" /> Pickup Time
+                        </Label>
+                        <Input 
+                          type="time"
+                          name="pickupTime"
+                          value={formData.pickupTime}
+                          onChange={handleChange}
+                          required
+                          className="bg-background border-border h-12 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                        />
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

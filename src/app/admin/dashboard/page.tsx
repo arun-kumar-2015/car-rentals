@@ -71,6 +71,7 @@ interface Booking {
   licensePhotoUrl?: string;
   carName: string;
   pickupDate: string;
+  pickupTime?: string;
   returnDate?: string;
   rentalType: "daily" | "hourly";
   durationLabel: string;
@@ -86,7 +87,6 @@ export default function AdminDashboard() {
   const router = useRouter();
   const { toast } = useToast();
   const prevBookingsCount = useRef<number>(0);
-  const [selectedLicense, setSelectedLicense] = useState<string | null>(null);
 
   const bookingsQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
@@ -224,7 +224,7 @@ export default function AdminDashboard() {
                     <TableHead className="min-w-[150px]">Customer</TableHead>
                     <TableHead>Car</TableHead>
                     <TableHead className="hidden sm:table-cell">Duration</TableHead>
-                    <TableHead>Dates</TableHead>
+                    <TableHead>Pickup Details</TableHead>
                     <TableHead>License</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
@@ -259,7 +259,14 @@ export default function AdminDashboard() {
                       </TableCell>
                       <TableCell>
                         <div className="text-[10px] sm:text-xs space-y-0.5">
-                          <div className="flex items-center gap-1"><span className="text-primary hidden sm:inline">Date:</span> {booking.pickupDate}</div>
+                          <div className="flex items-center gap-1 font-medium">
+                            <Calendar className="w-3 h-3 text-primary" /> {booking.pickupDate}
+                          </div>
+                          {booking.pickupTime && (
+                            <div className="flex items-center gap-1 text-muted-foreground">
+                              <Clock className="w-3 h-3 text-primary" /> {booking.pickupTime}
+                            </div>
+                          )}
                         </div>
                       </TableCell>
                       <TableCell>
