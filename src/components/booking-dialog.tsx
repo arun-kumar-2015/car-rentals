@@ -278,12 +278,12 @@ export function BookingDialog({
                 </TabsList>
 
                 <form onSubmit={handleBooking} className="space-y-8">
-                  {/* DURATION SELECTION (TOP) */}
+                  {/* DURATION SELECTION (AT TOP) */}
                   <TabsContent value="daily" className="mt-0 space-y-6">
                     <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="space-y-1">
                         <Label className="text-xs font-black uppercase tracking-widest text-primary">Set Days</Label>
-                        <p className="text-[10px] text-muted-foreground uppercase font-bold">Use +/- to adjust</p>
+                        <p className="text-[10px] text-muted-foreground uppercase font-bold">Use +/- to adjust duration</p>
                       </div>
                       <div className="flex items-center gap-6 bg-background p-3 rounded-xl border border-border self-end sm:self-auto shadow-sm">
                         <Button 
@@ -345,7 +345,7 @@ export function BookingDialog({
                   <TabsContent value="hourly" className="mt-0 space-y-6">
                     <div className="space-y-4">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary">
-                        <Timer className="w-4 h-4" /> Choose Duration
+                        <Timer className="w-4 h-4" /> Choose Duration (Hours Based Section)
                       </Label>
                       <div className="grid grid-cols-2 gap-4">
                         {["6", "12"].map((hrs) => (
@@ -370,6 +370,7 @@ export function BookingDialog({
                           </button>
                         ))}
                       </div>
+                      <p className="text-[10px] text-muted-foreground uppercase font-bold text-center">Plan starts from the selected pickup time</p>
                     </div>
 
                     <div className="space-y-3">
@@ -446,7 +447,7 @@ export function BookingDialog({
                       </div>
                     </div>
 
-                    {/* PHOTO UPLOAD (ABOVE PICKUP LOCATION) */}
+                    {/* LICENSE PHOTO (POSITIONED DIRECTLY ABOVE PICKUP LOCATION) */}
                     <div className="space-y-3">
                       <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
                         <Camera className="w-3 h-3 text-primary" /> Driving License Photo
@@ -466,7 +467,7 @@ export function BookingDialog({
                         ) : (
                           <label className="flex flex-col items-center justify-center aspect-video rounded-xl border-2 border-dashed border-border bg-secondary/20 cursor-pointer hover:border-primary/50 hover:bg-secondary/30 transition-all">
                             <Camera className="w-8 h-8 text-muted-foreground mb-2" />
-                            <span className="text-[10px] font-bold uppercase text-muted-foreground">Upload Photo</span>
+                            <span className="text-[10px] font-bold uppercase text-muted-foreground">Upload DL Photo</span>
                             <input 
                               type="file" 
                               accept="image/*" 
@@ -483,7 +484,7 @@ export function BookingDialog({
                         <MapPin className="w-3 h-3 text-primary" /> Pickup Location
                       </Label>
                       <Input 
-                        placeholder="E.g. Bus Stand"
+                        placeholder="E.g. Bus Stand or Railway Station"
                         name="pickupLocation"
                         value={formData.pickupLocation}
                         onChange={handleChange}
@@ -495,7 +496,7 @@ export function BookingDialog({
 
                   <div className="bg-primary/5 p-6 rounded-2xl border border-primary/20 flex justify-between items-center shadow-inner">
                     <div className="space-y-1">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Plan Selected</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Estimated Total</span>
                       <div className="flex items-center gap-2">
                         <Badge variant="secondary" className="bg-primary text-black font-black text-[11px] px-3 py-1">
                           {durationLabel}
@@ -504,12 +505,12 @@ export function BookingDialog({
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-black text-primary yellow-glow">₹{totalAmount.toLocaleString()}</div>
-                      <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Estimate</div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Estimated Price</div>
                     </div>
                   </div>
 
                   <Button type="submit" className="w-full h-16 text-xl font-black uppercase tracking-[0.15em] rounded-2xl shadow-xl shadow-primary/20 active:scale-[0.98] transition-all" disabled={loading}>
-                    {loading ? <Loader2 className="w-6 h-6 animate-spin mr-2" /> : "Book Ride"}
+                    {loading ? <Loader2 className="w-6 h-6 animate-spin mr-2" /> : "Confirm & Book Ride"}
                   </Button>
                 </form>
               </Tabs>
